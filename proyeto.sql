@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-09-2020 a las 22:34:34
+-- Tiempo de generación: 05-09-2020 a las 22:37:44
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.1.28
 
@@ -40,6 +40,7 @@ CREATE TABLE `consulta` (
   `idHabitacion` int(11) NOT NULL,
   `status` varchar(100) NOT NULL,
   `comentario` varchar(500) NOT NULL,
+  `folioExamen` int(11) NOT NULL,
   `resultadoExamen` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -47,8 +48,8 @@ CREATE TABLE `consulta` (
 -- Volcado de datos para la tabla `consulta`
 --
 
-INSERT INTO `consulta` (`idConsulta`, `hora`, `fecha`, `idDoctor`, `idPaciente`, `idExamen`, `idConsultorio`, `idEnfermero`, `idHabitacion`, `status`, `comentario`, `resultadoExamen`) VALUES
-(1, '20:16:06', '2020-09-09', 1, 1, 1, 1, 1, 1, '0', 'comentario onsulta', 'resultado examen');
+INSERT INTO `consulta` (`idConsulta`, `hora`, `fecha`, `idDoctor`, `idPaciente`, `idExamen`, `idConsultorio`, `idEnfermero`, `idHabitacion`, `status`, `comentario`, `folioExamen`, `resultadoExamen`) VALUES
+(1, '20:16:06', '2020-09-09', 1, 1, 1, 1, 1, 1, '0', 'comentario onsulta', 12548, 'resultado examen');
 
 -- --------------------------------------------------------
 
