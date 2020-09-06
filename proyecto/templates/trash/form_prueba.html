@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Crear una nueva tabla</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/own.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-center align-items-center login">
+            <div class="card tarjeta-login">
+                <div class="card-header">
+                    <h3 id="titulo">Crear tabla</h3>
+                </div>
+
+                <div class="card-body">
+                    <div id="formulario">
+
+                    </div>
+
+                    <button class="btn btn-primary btn-block" id="crearTabla" name="crearTabla">Guardar tabla</button>
+
+                    <p class="mini-mensaje mt-4 mb-1">*Crea un artículo de prueba para la correcta creación de la tabla.</p>
+                    <p class="mini-mensaje mt-1 mb-1">*El artículo no se guardará en la base de datos.</p>
+                    <form method="POST" hidden>
+                        {{ form.hidden_tag() }}
+                        {{form.query(class="form-control", id="q")}}
+                        {{form.tabla(class="form-control", id="t")}}
+                        {{form.submit(class="btn btn-primary btn-block", id="c")}}                     
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script>
+        main = function () {
+            let q = document.getElementById('q');
+            let formulario = document.getElementById('formulario');
+            let rows = localStorage.getItem('rows').split(',');
+
+            document.getElementById('titulo').innerText = `CREAR ${rows[0].toUpperCase()}`;
+
+            for (let i = 1; i < rows.length; i++) {
+                let input = document.createElement('input');
+                input.id = `${rows[i]}`;
+                input.name = `${rows[i]}`;
+                input.placeholder = `${rows[i]}`;
+                input.maxLength = 20;
+                input.classList.add("form-control");
+                input.classList.add("mb-3");
+                formulario.appendChild(input);
+            }
+
+            // crear botón para crear el query con los tipos de datos
+            /*let input = document.createElement('button');
+            input.id = `crearTabla`;
+            input.name = `crearTabla`;
+            input.value = `Enviar`;
+            input.innerText = `Enviar`;
+            formulario.appendChild(input);*/
+
+            let queryRaw = localStorage.getItem('query').split('#');
+
+            document.getElementById('crearTabla').addEventListener('click', () => {
+                let fullQuery = '';
+
+                for (let i = 1; i < rows.length; i++) {
+                    let id = document.getElementById(rows[i]).value;
+                    let dataType = (id % 1 == 0) ? 'INT' : isNaN(id) ? 'VARCHAR(255)' : 'DOUBLE';
+                    fullQuery += `${queryRaw[i - 1]} ${dataType}`;
+                }
+
+                fullQuery += queryRaw[queryRaw.length - 1];
+
+                alert(fullQuery);
+                console.log(fullQuery);
+
+                q.value = fullQuery;
+                document.getElementById('t').value = localStorage.getItem('table_name');
+                document.getElementById('c').click();
+            });
+        }
+
+        window.addEventListener('load', main);
+    </script>
+</body>
+
+</html>

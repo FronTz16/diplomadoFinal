@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+    <div class="card-body">
+            <table class="table" id="">
+                <thead>
+                    <tr>              
+                        <td>ID</td>
+                        <td>Modelo</td>
+                        <td>Marca</td>
+                        <td>Año</td>
+                        <td>Precio</td>
+
+                        {% if current_user.privilegios >= 2%}
+                        <td>Editar</td>
+                        <td>Eliminar</td>
+                         {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                
+                {% for data in form %}
+                    {%  if data %}
+                    <tr>
+                        <td>{{data.0}}</td>
+                        <td>{{data.1}}</td>
+                        <td>{{data.2}}</td>
+                        <td>{{data.3}}</td>
+                        <td>{{data.4}}</td>
+                        <p hidden="true">{{data.0}},{{data.1}},{{data.2}},{{data.3}},{{data.4}}</p>
+                        {% if current_user.privilegios >= 2%}
+                        <td>
+                            <a href="{{url_for('editar_reg',id=data.0,tabla=title)}}" class="opcion-tabla">Editar</a>
+                        </td>
+                        <td>
+                            <a href="{{url_for('eliminar',tabla=title,id=data.0)}}" class="opcion-tabla">Eliminar</a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+                
+            </tbody>
+
+            </table>
+
+            <table class="table" id="tabla" hidden>
+                <thead>
+                    <tr>              
+                        <td>ID</td>
+                        <td>Modelo</td>
+                        <td>Marca</td>
+                        <td>Año</td>
+                        <td>Precio</td>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                
+                {% for data in form %}
+                    {%  if data %}
+                    <tr>
+                        <td>{{data.0}}</td>
+                        <td>{{data.1}}</td>
+                        <td>{{data.2}}</td>
+                        <td>{{data.3}}</td>
+                        <td>{{data.4}}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+                
+            </tbody>
+
+            </table>
+
+            <li class="list-group-item">
+                <span class="user">{{ current_user.nombre }}</span>:
+                <span class="vir">~</span>$ 
+                <a href="{{url_for('opciones')}}">Regresar</a>
+            </li>
+    </div>
+
+    <script src="https://unpkg.com/jspdf@1.5.3/dist/jspdf.min.js"></script>
+    <script src="https://unpkg.com/jspdf-autotable@3.2.5/dist/jspdf.plugin.autotable.js"></script>
+
+<script>
+    function generarPDF() {
+        var doc = new jsPDF();
+        doc.autoTable({html: '#tabla'});
+        doc.save('table.pdf');
+    }
+</script>
+
+
+
+
+
+{% endblock content %}

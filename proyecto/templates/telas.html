@@ -1,0 +1,65 @@
+{% extends "new_navbar.html" %} {% block content %} {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+<div class="alert alert-{{ category }}">
+    {{ message }}
+</div>
+{% endfor %} {% endif %} {% endwith %}
+
+
+<div class="card-body">
+    <table class="table" id="tabla">
+        <thead class="thead-dark">
+            <tr>
+                <th class="text-center">ID</th>
+                <th class="text-center">Nombre Tela</th>
+                <th class="text-center">Kg Disponibles</th>
+                <th class="text-center">Opciones</th>
+            </tr>
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+            <tr>
+                <td class="text-center"> data.0 </td>
+                <td class="text-center"> data.1 </td>
+                <td class="text-center"> data.2 </td>
+                <td>
+                    <div class="row justify-content-around">
+
+                        <div class="col-4">
+
+                            <a class="align-ce" href="" class="float-left">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+
+
+
+        </tbody>
+    </table>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <button onclick="window.location.href='{{url_for('agregar_tela')}}'" type="button" class="btn bg-danger btn-lg btn-block"> 
+                            Agregar Tela
+                        </button>
+            </div>
+            <div class="col">
+                <button class="btn btn-success btn-block btn-lg" onclick="generarPDF()">Generar PDF</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="/static/js/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#tabla').DataTable();
+    });
+</script>
+{% endblock content %}

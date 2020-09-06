@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Crear una nueva tabla</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/own.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-center align-items-center login">
+            <div class="card tarjeta-login">
+                <div class="card-header">
+                    <h3>Crear tabla</h3>
+                </div>
+
+                <div class="card-body">
+                    <form action="#" id="formulario">
+                        <div class="form-group">
+                            <label for="usuario">Nombre de tabla</label>
+                            <input type="text" class="form-control" id="table_name"
+                                placeholder="Ingresa el nombre de la tabla">
+                        </div>
+                    </form>
+
+                    <div class="row">
+                        <div class="col">
+                            <button class="btn btn-primary btn-block" id="agregar">Agregar campo</button>
+                        </div>
+
+                        <div class="col">
+                            <button class="btn btn-primary btn-block" id="crear_query">Continuar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script>
+        class Query {
+            constructor() {
+                this.query = 'CREATE TABLE IF NOT EXISTS ';
+            }
+
+            setName(tableName) {
+                this.query += `${tableName}`;
+            }
+
+            addField(field) {
+                this.query += `${field}`;
+            }
+
+            saveRaw() {
+                localStorage.setItem("query", this.query);
+            }
+        }
+
+        main = function () {
+            let id_counter = 0;
+
+            document.getElementById('agregar').addEventListener('click', () => {
+                let formulario = document.getElementById('formulario');
+                let input = document.createElement(`input`);
+
+                input.id = `campo_${id_counter}`;
+                input.placeholder = 'Nuevo campo';
+                input.maxLength = 20;
+                input.classList.add("form-control");
+                input.classList.add("mb-3");
+                formulario.appendChild(input);
+
+                id_counter++;
+            });
+
+            document.getElementById('crear_query').addEventListener('click', () => {
+                // definición del objeto query
+                let query = new Query();
+                // obtener el nombre de la tabla
+                let table_name = document.getElementById('table_name').value;
+                localStorage.setItem("table_name", table_name);
+                // obtener los campos del formulario
+                let nodes = document.getElementById('formulario').childNodes;
+
+                // dar nombre a la tabla
+                query.setName(table_name);
+                query.addField(` (\nid_${table_name} INT AUTO_INCREMENT PRIMARY KEY,\n`);
+
+                // definir desde dónde itera el bucle
+                let init = 3;
+                let end = document.getElementById('formulario').childNodes.length;
+
+                // definir vector que se guarda en localStorage
+                let vectorLocal = [];
+
+                // guardar el nombre de la base de datos en LS en la primera posición del vectorLocal
+                vectorLocal.push(table_name);
+
+                for (let i = 3; i < end; i++) {
+                    let current = document.getElementById(nodes[i].id).value;
+
+                    if (i == end - 1) {
+                        query.addField(`${current} #);`);
+                    } else {
+                        query.addField(`${current} #,\n`);
+                    }
+
+                    // se guarda cada row en el vector de LS
+                    vectorLocal.push(current);
+                }
+
+                // se guarda el query en el vector temporal
+                query.saveRaw(query.query);
+
+                // se guardan las row en LS
+                localStorage.setItem("rows", vectorLocal);
+
+                // se redirecciona al form de pruebar
+                window.location = "{{url_for('form_prueba')}}";
+            });
+        }
+
+        window.addEventListener('load', main);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+{% extends "new_navbar.html" %}
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+	<div class="card-body">
+        <table class="table" id="tabla">
+            <thead class="thead-dark">
+                <tr>
+                	<th># Orden</th>              
+                    <th>Estatus</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Prenda</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+             	{% for data in form %}
+
+                <tr>
+                	<td class="text-center"> {{ data.0 }}</td>
+                	{% if data.1==0 %}
+                    	<td class="text-warning">Pendiente</td>
+                    {% elif data.1==1 %}
+                    	<td class="text-primary">Cortando Tela</td>
+                    {% elif data.1==2 %}
+                    	<td class="text-primary">Armando Prenda</td>
+                    {% elif data.1==3 %}
+                    	<td class="text-primary">Ultimos Detalles</td>
+                    {% elif data.1==4 %}
+                    	<td class="text-success">Enviado</td>
+                    {% elif data.1==5 %}
+                    	<td class="text-danger">Cancelado</td>
+                    {% endif %}
+                    <td>{{ data.3 }}</td>
+                    <td>{{ data.6 +"   "+ data.7 }}</td>
+                    <td>{{ data.5 }}</td>
+                    <td>{{ data.4 }}</td>
+                    <td>{{ data.2 }}</td>
+                    <td>
+                    	<div class="col align-self-center">       
+                        	<a class="align-ce"href="{{url_for('editar_pedido',id=data.0)}}" class="float-left">
+                            	<i class="fas fa-edit"></i>
+                        	</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col align-self-start">
+                        
+                    </div>
+                    <div class="col align-self-center">
+                        <button class="btn btn-success btn-block" onclick="generarPDF()">Generar PDF</button>
+                    </div>
+                    <div class="col align-self-end">
+                        
+                    </div>
+                </div>
+            </div>
+            
+    
+            <script src="/static/js/jquery.min.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#tabla').DataTable();
+                } );
+
+            </script>
+{% endblock content%}

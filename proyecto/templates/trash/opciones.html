@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+{% endwith %}
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <span class="user">{{ current_user.nombre }}</span>:
+                <span class="vir">~</span>$ 
+                <a href="{{url_for('usuarios',opcion='Usuarios')}}">Usuarios</a>
+            </li>
+            {% for data in form %}
+            <li class="list-group-item">
+                <span class="user">{{ current_user.nombre }}</span>:
+                <span class="vir">~</span>$ 
+                <a href="{{url_for('ver',opcion=data.1)}}">{{ data.1 }}</a>
+            </li>
+            {% endfor %}
+
+            {% if current_user.privilegios == 3 %}
+            <li class="list-group-item">
+                <span class="user">{{ current_user.nombre }}</span>:
+                <span class="vir">~</span>$ 
+                <a href="{{url_for('registro')}}">Crear Usuario</a>
+            </li>
+            {% endif %}
+
+            {% if current_user.privilegios >= 2 %}
+            <li class="list-group-item">
+                <span class="user">{{ current_user.nombre }}</span>:
+                <span class="vir">~</span>$ 
+                <a href="{{url_for('crear_vehiculo')}}">Crear Vehiculo</a>
+            </li>
+            {% endif %}
+
+            <li class="list-group-item">
+                <span class="user">{{ current_user.nombre }}</span>:
+                <span class="vir">~</span>$ 
+                <a href="{{url_for('logout')}}">Cerrar sesión</a>
+            </li>
+
+        </ul>
+    </div>
+{% endblock content %}

@@ -1,0 +1,80 @@
+{% extends "new_navbar.html" %}
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+    <div class="card-body">
+            <table class="table" id="tabla">
+                <thead class="thead-dark">
+                    <tr>              
+                        <th class="text-center">Tipo</th>
+                        <th class="text-center">Peso Kg</th>
+                        <th class="text-center">Precio</th>
+                        <th class="text-center">Tela</th>
+                        <th class="text-center">Genero</th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Piezas Disponibles</th>
+                        <th class="text-center">Opciones</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                
+                {% for data in form %}
+
+                    <tr>  
+                        <td class="text-center">{{ data.1 }}</td>
+                        <td class="text-center">{{ data.2 }}</td>
+                        <td class="text-center">{{ data.3}}</td>
+                        <td class="text-center">{{ data.4}}</td>
+                        <td class="text-center">{{ data.5}}</td>
+                        <td class="text-center">{{ data.6}}</td>
+                        <td class="text-center">{{ data.7}}</td>
+                        <td>
+                        	<div class="row justify-content-around">
+    							<div class="col-4">
+      								<a href="{{url_for('eliminar',tabla='prenda',id=data.0,vista='modelos_ropa')}}" class="float-left">
+                            			<i class="fas fa-trash"></i>
+                            		</a>
+    							</div>
+    							<div class="col-4">
+      								<!-- <a href="" class="float-right"><i class="fas fa-edit"></i></a> -->
+    							</div>
+  							</div>
+                        </td>
+                        
+                    </tr>
+
+
+                {% endfor %}
+            </tbody>
+            </table>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <button onclick="window.location.href='{{url_for('crear_modelo')}}'" type="button" class="btn btn-block bg-warning "> 
+                            Agregar Modelo
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-success btn-block" onclick="generarPDF()">Generar PDF</button>
+                    </div>
+                </div>
+            </div>
+            <script src="/static/js/jquery.min.js"></script>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#tabla').DataTable();
+                } );
+
+            </script>
+
+{% endblock content %}

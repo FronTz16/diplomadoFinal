@@ -1,0 +1,83 @@
+{% extends "new_navbar.html" %} {% block content %}
+<div class="container">
+    <div class="d-flex justify-content-center align-items-center login">
+        <div class="card tarjeta-login mb-4 mt-4">
+            <div class="card-header">
+                <h3>Crear usuario</h3>
+            </div>
+
+            <div class="card-body">
+                <form action="#" method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                {{form.nombres.label()}} {% if form.nombres.errors %} {{form.nombres(class="form-control is-invalid", placeholder="Nombre")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.nombres.errors %}
+                                    <span>{{error}}</span> {% endfor %}
+                                </div>
+                                {% else %} {{form.nombres(class="form-control", placeholder="Nombre")}} {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                {{form.apellidos.label()}} {% if form.apellidos.errors %} {{form.apellidos(class="form-control is-invalid", placeholder="Apellidos")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.apellidos.errors %}
+                                    <span>{{error}}</span> {% endfor %}
+                                </div>
+                                {% else %} {{form.apellidos(class="form-control", placeholder="Apellidos")}} {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        {{form.email.label()}} {% if form.email.errors %} {{form.email(class="form-control is-invalid", placeholder="Email")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                            <span>{{error}}</span> {% endfor %}
+                        </div>
+                        {% else %} {{form.email(class="form-control", placeholder="Email")}} {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        {{form.password.label()}} {% if form.password.errors %} {{form.password(class="form-control is-invalid", placeholder="Contraseña")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                            <span>{{error}}</span> {% endfor %}
+                        </div>
+                        {% else %} {{form.password(class="form-control", placeholder="Contraseña")}} {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{form.confirm_password.label()}} {% if form.confirm_password.errors %} {{form.confirm_password(class="form-control is-invalid", placeholder="Confirmar contraseña")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.confirm_password.errors %}
+                            <span>{{error}}</span> {% endfor %}
+                        </div>
+                        {% else %} {{form.confirm_password(class="form-control", placeholder="Confirmar contraseña")}} {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <a href="#" data-toggle="tooltip" data-placement="left" title="Entre más alto el nivel del usuario más capacidades tendrá en el sistema.">
+                            <span class="badge badge-pill badge-primary">?</span>
+                        </a>
+                        {{form.privilegios.label()}} {% if form.privilegios.errors %} {{form.privilegios(class="form-control is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.privilegios.errors %}
+                            <span>{{error}}</span> {% endfor %}
+                        </div>
+                        {% else %} {{form.privilegios(class="form-control")}} {% endif %}
+
+                    </div>
+
+                    <div class="form-group">
+                        {{form.submit(class="btn btn-primary btn-block")}}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

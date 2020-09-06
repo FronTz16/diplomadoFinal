@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Inicia sesión</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/own.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-center align-items-center login">
+            <div class="card tarjeta-login">
+                <div class="card-header">
+                    <h3>Inicia Sesión</h3>
+                </div>
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <div class="card-body">
+                    <form action="#" method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{form.email.label()}}
+                            {% if form.email.errors %}
+
+                                {{form.email(class="form-control is-invalid", placeholder="Email")}}
+                                <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    <span>{{error}}</span>
+                                {% endfor %}
+                                 </div>
+                            {% else %}
+                                {{form.email(class="form-control", placeholder="Email")}}
+                            {% endif %}             
+                        </div>
+
+                        <div class="form-group">
+                            {{form.password.label()}}
+                            {% if form.password.errors %}
+
+                                {{form.password(class="form-control is-invalid", placeholder="Contraseña")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.password.errors %}
+                                        <span>{{error}}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{form.password(class="form-control", placeholder="Contraseña")}}
+                            {% endif %}             
+                        </div> 
+                       <div class="form-group">
+                            {{form.submit(class="btn btn-primary btn-block")}}
+                        </div>   
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+</body>
+
+</html>

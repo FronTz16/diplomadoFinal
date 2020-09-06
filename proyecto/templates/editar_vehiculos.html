@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Editar {{title}}</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/own.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-center align-items-center login">
+            <div class="card tarjeta-login">
+                <div class="card-header">
+                    <h3>Editar {{title}}</h3>
+                </div>
+
+                <div class="card-body">
+                    <form action="#" method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{info.0.1}}
+                                    {% if form.modelo.errors %}
+                                        {{form.modelo(class="form-control is-invalid", placeholder="Nuevo Modelo", text="info.0.1")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.modelo.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.modelo(class="form-control", placeholder="Modelo")}}
+                                    {% endif %}             
+                        </div>
+
+                        <div class="form-group">
+                                    {{info.0.2}}
+                                    {% if form.marca.errors %}
+
+                                        {{form.marca(class="form-control is-invalid", placeholder="Nueva Marca")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.marca.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.marca(class="form-control", placeholder="Marca")}}
+                                    {% endif %}             
+                        </div>                        
+                        <div class="form-group">
+                                    {{info.0.3}}
+                                    {% if form.año.errors %}
+
+                                        {{form.año(class="form-control is-invalid", placeholder="Año")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.año.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.año(class="form-control", placeholder="Año")}}
+                                    {% endif %}             
+                        </div>  
+                        <div class="form-group">
+                            {{info.0.4}}
+                            {% if form.precio.errors %}
+
+                                {{form.precio(class="form-control is-invalid", placeholder="Precio")}}
+                                <div class="invalid-feedback">
+                                    {% for error in form.precio.errors %}
+                                        <span>{{error}}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{form.precio(class="form-control", placeholder="Precio")}}
+                            {% endif %}             
+                        </div>  
+
+
+                        <div class="form-group">
+                            {{form.submit(class="btn btn-primary btn-block")}}
+                        </div>    
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+</body>
+
+</html>
