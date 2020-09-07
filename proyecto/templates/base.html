@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<meta charset="utf-8">
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  	<meta name="description" content="">
+  	<meta name="author" content="">
+    <title>{{title}}</title>
+  	<link href="/static/css/sb-admin.css" rel="stylesheet">
+      <link href="/static/css/all.min.css" rel="stylesheet">
+      <link href="/static/css/new.css" rel="stylesheet">
+  	<link href="/static/css/dataTables.bootstrap4.css" rel="stylesheet">
+  	
+</head>
+<body>
+	<div class="header">
+        <div class="left">
+            <p>iDoctor</p>
+        </div>
+        <div class="right">
+            <div class="doc">
+                <img src="../static/img/1.jpg" alt="" class="img">
+            </div>
+            <div class="out">
+                <a href="{{url_for('logout')}}">
+                    <i class="fas fa-sign-out-alt"></i>
+                  </a>
+            </div>
+        </div>
+    </div>
+    <div class="lbar">
+        <div class="search">
+            <input type="text" placeholder="Buscar..">
+        </div>
+        <ul>
+            <i class="fas fa-users"><a href="#">Mis pacientes</a> </i>
+            <i class="fas fa-th-list"><a href="#">Mis consultas</a> </i>
+            <i class="fas fa-briefcase"><a href="#">Exámenes médicos</a></i>
+        </ul>
+    </div>
+    <div class="cont">
+        <div class="header2">
+            <i class="fas fa-briefcase-medical"><span>CONSULTA</span></i>
+        </div>
+        <div class="in">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+  <!-- <footer class="sticky-footer">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Programado con mucho Amor <i class="fas fa-heart"></i> y Alcohol <i class="fas fa-beer"></i> </span>
+      </div>
+    </div>
+  </footer> -->
+    <!-- Bootstrap core JavaScript-->
+  	<script src="/static/js/jquery/jquery.js"></script>
+  	<script src="/static/js/bootstrap.bundle.min.js"></script>
+
+    
+    <script src="/static/js/jquery.dataTables.js"></script>
+    <script src="/static/js/dataTables.bootstrap4.js"></script>
+
+  	
+  	<!-- Core plugin JavaScript-->
+    <script src="/static/js/jquery/jquery.easing.min.js"></script>
+
+  	<!-- Custom scripts for all pages-->
+  	<script src="/static/js/sb-admin.js"></script>
+    <script src="https://unpkg.com/jspdf@1.5.3/dist/jspdf.min.js"></script>
+    <script src="https://unpkg.com/jspdf-autotable@3.2.5/dist/jspdf.plugin.autotable.js"></script>
+    <script>
+        function generarPDF() {
+            var doc = new jsPDF();
+            doc.autoTable({html: '#tabla'});
+            doc.save('table.pdf');
+        }
+    </script>
+
+</body>
+
+</html>

@@ -193,3 +193,19 @@ def eliminar(tabla,id,vista):
 def graficas():
 
 	return render_template('graficas.html', title="Graficas")
+
+# inicio de la base -----
+@app.route('/base')
+#@login_required
+def base():
+
+	return render_template('base.html', title="Base")
+# fin de la base --------
+
+# ejemplo ------------------
+@app.route('/nuevoExamen')
+#@login_required
+def nuevoExamen():
+
+	return render_template('nuevo_examen.html', title="Graficas")
+#fin del ejemplo ------------------------
