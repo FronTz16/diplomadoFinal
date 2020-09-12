@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block content %}
+
+	<div class="cards">
+        <!-- aqui va el pack -->
+        <div class="card-body">
+            <form action="#" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.nombre.label()}}
+                            {% if form.nombre.errors %}
+                                        {{form.nombre(class="form-control is-invalid", placeholder="Nombre")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.nombre.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.nombre(class="form-control", placeholder="Nombre")}}
+                                    {% endif %} 
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.fecha_nacimiento.label()}}
+                            {% if form.fecha_nacimiento.errors %}
+                                        {{form.fecha_nacimiento(class="form-control is-invalid", placeholder="Fecha")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.fecha_nacimiento.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.fecha_nacimiento(class="form-control", placeholder="Fecha")}}
+                                    {% endif %} 
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.sexo.label()}}
+                            {% if form.sexo.errors %}
+                                        {{form.sexo(class="form-control is-invalid", placeholder="Genero")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.sexo.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.sexo(class="form-control", placeholder="Genero")}}
+                                    {% endif %} 
+                        </div>
+                    </div>
+                </div>
+                <!-- --- -->
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.lugar_nacimiento.label()}}
+                            {% if form.lugar_nacimiento.errors %}
+                                        {{form.lugar_nacimiento(class="form-control is-invalid")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.lugar_nacimiento.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.lugar_nacimiento(class="form-control")}}
+                                    {% endif %} 
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.curp.label()}}
+                            {% if form.curp.errors %}
+                                        {{form.curp(class="form-control is-invalid", placeholder="Curp")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.curp.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.curp(class="form-control", placeholder="Curp")}}
+                                    {% endif %} 
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.tipo_sangre.label()}}
+                            {% if form.tipo_sangre.errors %}
+                                        {{form.tipo_sangre(class="form-control is-invalid", placeholder="Tipo de sangre")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.tipo_sangre.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.tipo_sangre(class="form-control", placeholder="Tipo de sangre")}}
+                                    {% endif %} 
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.pre_enfermedades.label()}}
+                            {% if form.pre_enfermedades.errors %}
+                                        {{form.pre_enfermedades(class="form-control is-invalid", placeholder="Preexistenias")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.pre_enfermedades.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.pre_enfermedades(class="form-control", placeholder="Preexistenias")}}
+                                    {% endif %} 
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.alergias.label()}}
+                            {% if form.alergias.errors %}
+                                        {{form.alergias(class="form-control is-invalid", placeholder="Alergias")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.alergias.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.alergias(class="form-control", placeholder="Alergias")}}
+                                    {% endif %} 
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.contacto.label()}}
+                            {% if form.contacto.errors %}
+                                        {{form.contacto(class="form-control is-invalid", placeholder="Conctacto")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.contacto.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.contacto(class="form-control", placeholder="Conctacto")}}
+                                    {% endif %} 
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.contacto_referencia.label()}}
+                            {% if form.contacto_referencia.errors %}
+                                        {{form.contacto_referencia(class="form-control is-invalid", placeholder="4427777")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.contacto_referencia.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.contacto_referencia(class="form-control", placeholder="4427777")}}
+                                    {% endif %} 
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.transitorio.label()}}
+                            {% if form.transitorio.errors %}
+                                        {{form.transitorio(class="form-control is-invalid", placeholder="transitorio")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.transitorio.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.transitorio(class="form-control", placeholder="transitorio")}}
+                                    {% endif %} 
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.submit(class="btn bg-danger btn-lg btn-block")}}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

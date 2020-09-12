@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,SubmitField, BooleanField, SelectField,IntegerField, DecimalField,FileField
+from wtforms import StringField,PasswordField,SubmitField, BooleanField, SelectField,IntegerField, DecimalField,FileField, DateField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 class registration_form(FlaskForm):
@@ -92,3 +92,57 @@ class nota_form(FlaskForm):
 	nota = StringField('Nota',
 						validators=[DataRequired(),Length(min=2, max=100)])
 	submit= SubmitField('Guardar')
+
+# nuevos forms 
+
+class nuevo_paciente_form(FlaskForm):
+	nombre = StringField('Nombre completo',
+						validators=[DataRequired(),Length(min=10, max=50)])
+
+	fecha_nacimiento = DateField('Fecha de nacimiento',
+						validators=[DataRequired()])
+
+	sexo = SelectField('Genero',
+		                    choices=[
+										('Hombre','Hombre'),
+										('Mujer','Mujer')])
+
+	lugar_nacimiento = SelectField('Lugar de nacimiento',
+		                                choices=[
+										            ('CDMX','CDMX'),
+										            ('Qro','Qro')])
+	
+	curp = StringField('Curp',
+	                    validators=[DataRequired(),Length(min=1, max=18)])
+	
+	tipo_sangre = SelectField('Tipo de sangre',
+	                            choices=[
+                                            ('A+','A positivo'),
+											('A-','A negativo'),
+											('B+','B positivo'),
+											('B-','B negativo'),
+											('O+','O positivo'),
+											('O-','O negativo'),
+											('AB+','AB positivo'),
+											('AB-','AB negativo')])
+										
+	pre_enfermedades = StringField('Preexistenias',
+	                                validators=[DataRequired(),Length(min=1, max=50)])
+	
+	alergias = StringField('Alergias',
+							validators=[DataRequired(),Length(min=1, max=20)])
+						
+	contacto = StringField('Teléfono',
+	                        validators=[DataRequired(),Length(min=1, max=10)])
+
+	contacto_referencia = StringField('Contacto de referencia',
+	                    				validators=[DataRequired(),Length(min=1, max=10)])
+
+	transitorio = SelectField('Status',
+		                                choices=[
+										            ('si','si'),
+										            ('nel','nel')])					
+    
+	submit= SubmitField('GUARDAR PACIENTE')
+	
+

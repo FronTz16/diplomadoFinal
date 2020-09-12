@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for,flash, redirect, request
-from proyecto.forms import registration_form, login_form, model_form, editar_pedido_form, tela_form,nota_form
+from proyecto.forms import registration_form, login_form, model_form, editar_pedido_form, tela_form,nota_form, nuevo_paciente_form
 from proyecto.conection import conexion, user
 from proyecto import app, bcrypt
 from proyecto.users import user
@@ -208,4 +208,13 @@ def base():
 def nuevoExamen():
 
 	return render_template('nuevo_examen.html', title="Graficas")
+#fin del ejemplo ------------------------
+
+# nuevo paciente ------------------
+@app.route('/nuevo_paciente')
+#@login_required
+def nuevoPaciente():
+	form=nuevo_paciente_form()
+
+	return render_template('nuevo_paciente.html', form=form ,title="Nuevo Paciente")
 #fin del ejemplo ------------------------
