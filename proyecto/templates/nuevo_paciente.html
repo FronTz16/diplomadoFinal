@@ -26,14 +26,14 @@
                         <div class="form-group">
                             {{form.fecha_nacimiento.label()}}
                             {% if form.fecha_nacimiento.errors %}
-                                        {{form.fecha_nacimiento(class="form-control is-invalid", placeholder="Fecha")}}
+                                        {{form.fecha_nacimiento(class="form-control is-invalid", type="date")}}
                                         <div class="invalid-feedback">
                                             {% for error in form.fecha_nacimiento.errors %}
                                                 <span>{{error}}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{form.fecha_nacimiento(class="form-control", placeholder="Fecha")}}
+                                        {{form.fecha_nacimiento(class="form-control", type="date")}}
                                     {% endif %} 
                         </div>
                     </div>

@@ -89,6 +89,7 @@ class conexion:
     def insert_usuarios(self, nombre, apellidos, password, email, id_tipo):
       query=('INSERT INTO usuarios (nombreUsuario, apellidoUsuario, emailUsuario, password, id_tipo) '
               f'VALUES ("{nombre}", "{apellidos}","{email}","{password}","{id_tipo}")')
+      print("QUERY--------------------------",query)
       self.ejecutar_query(query,"2")
       
     def insert_tela(self, nombre_color, peso):
@@ -152,3 +153,16 @@ class conexion:
 
       query="INSERT INTO notas (id_usuario, nota)VALUES (%i,'%s')"%(idUsuario,nota)
       result=self.ejecutar_query(query,"2")
+
+#insert de paciente   
+
+    def insert_paciente(self, nombre, fecha_nacimiento, sexo, lugar_nacimiento, curp, tipo_sangre, pre_enfermedades, alergias, contacto, contacto_referencia, transitorio):
+      query=('INSERT INTO paciente (nombre, fechaNacimiento, sexo, lugarNacimiento, curp, grupoSanguineo, enfermedadesPre, alergias, contacto, contactoReferencia, transitorio) '
+              f'VALUES ("{nombre}", "{fecha_nacimiento}","{sexo}","{lugar_nacimiento}","{curp}","{tipo_sangre}","{pre_enfermedades}","{alergias}","{contacto}","{contacto_referencia}","{transitorio}")')
+      self.ejecutar_query(query,"2")
+
+    def select_pacientes(self):
+      query="SELECT * from paciente WHERE 1"
+      cursor= self.ejecutar_query(query,"1")
+      data = cursor.fetchall()
+      return data

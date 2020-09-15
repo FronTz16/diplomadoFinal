@@ -100,7 +100,7 @@ class nuevo_paciente_form(FlaskForm):
 						validators=[DataRequired(),Length(min=10, max=50)])
 
 	fecha_nacimiento = DateField('Fecha de nacimiento',
-						validators=[DataRequired()])
+						validators=[DataRequired('Seleciona una fecha')])
 
 	sexo = SelectField('Genero',
 		                    choices=[

@@ -211,10 +211,38 @@ def nuevoExamen():
 #fin del ejemplo ------------------------
 
 # nuevo paciente ------------------
-@app.route('/nuevo_paciente')
+@app.route('/nuevo_paciente',methods=['GET','POST'])
 #@login_required
 def nuevoPaciente():
 	form=nuevo_paciente_form()
+	
+	if form.validate_on_submit():
+		print("AGREGAR")
+		nombre=form.nombre.data
+		fecha_nacimiento=form.fecha_nacimiento.data
+		sexo=form.sexo.data
+		lugar_nacimiento=form.lugar_nacimiento.data
+		curp=form.curp.data
+		tipo_sangre=form.tipo_sangre.data
+		pre_enfermedades=form.pre_enfermedades.data
+		alergias=form.alergias.data
+		contacto=form.contacto.data
+		contacto_referencia=form.contacto_referencia.data
+		transitorio=form.transitorio.data
+		conn=conexion()
+		conn.insert_paciente(nombre, fecha_nacimiento, sexo, lugar_nacimiento, curp, tipo_sangre, pre_enfermedades, alergias, contacto, contacto_referencia, transitorio)
+		flash('Se agrego el paciente correctamente', 'success')
+		return redirect(url_for('base'))
+
 
 	return render_template('nuevo_paciente.html', form=form ,title="Nuevo Paciente")
+#fin del ejemplo ------------------------
+
+@app.route('/mis_pacientes')
+#@login_required
+def misPacientes():
+
+	conn=conexion()
+	form=conn.select_pacientes()
+	return render_template('lista_pacientes.html', form=form, title="Mis Pacientes")
 #fin del ejemplo ------------------------

@@ -1,7 +1,42 @@
 {% extends "base.html" %}
 {% block content %}
 
-	<div class="cards">
-        <!-- aqui va el pack -->
+{% for data in form %}
+	<div class="bloques">
+        <div class="puntos">
+            <!-- <img src="../static/img/1.jpg" alt="" class="img"> -->
+            <p>:</p>
+        </div>
+        <div class="perfil">
+            <img src="../static/img/1.jpg" alt="" class="img">
+        </div>
+        <div class="info">
+            <div class="tt1">
+                <p>{{ data.1 }}</p>
+            </div>
+            <div class="tt">
+                <p>25 años</p>
+            </div>
+            <div class="tt2">
+                <p>{{ data.3 }}</p>
+            </div>
+            <div class="tt">
+                <button class=" btn btn-danger btn-lg">Historial</button>
+            </div>
+
+        </div>
+        <div></div>
+        
     </div>
+    {% endfor %}
+
+    <div class="bloques">
+        <div class="plus">
+            <img src="" alt="">
+        </div>
+        <div class="plusT">
+            <a href="{{url_for('nuevoPaciente')}}">Nuevo paciente</a>
+        </div>
+    </div>
+
 {% endblock content %}
