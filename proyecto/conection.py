@@ -162,7 +162,7 @@ class conexion:
       self.ejecutar_query(query,"2")
 
     def select_pacientes(self):
-      query="SELECT * from paciente WHERE 1"
+      query="SELECT nombre, sexo, floor(datediff (now(), fechaNacimiento)/365) from paciente WHERE 1"
       cursor= self.ejecutar_query(query,"1")
       data = cursor.fetchall()
       return data
