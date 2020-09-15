@@ -1,5 +1,7 @@
 from flask import Flask, render_template, url_for,flash, redirect, request
+from flask_wtf import form
 from proyecto.forms import registration_form, login_form, model_form, editar_pedido_form, tela_form,nota_form, nuevo_paciente_form
+from proyecto.forms import nuevo_doctor_form
 from proyecto.conection import conexion, user
 from proyecto import app, bcrypt
 from proyecto.users import user
@@ -246,3 +248,22 @@ def misPacientes():
 	form=conn.select_pacientes()
 	return render_template('lista_pacientes.html', form=form, title="Mis Pacientes")
 #fin del ejemplo ------------------------
+
+
+# nuevo doctor ------------------
+@app.route('/nuevo_doctor', methods=['GET', 'POST'])
+# @login_required
+def nuevoDoctor():
+	form = nuevo_doctor_form()
+
+	if form.validate_on_submit():
+		print("AGREGAR")
+		nombre = form.nombre.data
+		contacto = form.contacto.data
+		especialidad = form.especialidad.data
+		conn = conexion()
+		conn.insert_doctor(nombre, contacto, especialidad)
+		flash('Se agrego el docctor correctamente', 'success')
+		return redirect(url_for('base'))
+
+	return render_template('nuevo_doctor.html', form=form, title="Nuevo Doctor")

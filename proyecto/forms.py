@@ -144,5 +144,17 @@ class nuevo_paciente_form(FlaskForm):
 										            ('nel','nel')])					
     
 	submit= SubmitField('GUARDAR PACIENTE')
-	
 
+
+class nuevo_doctor_form(FlaskForm):
+	nombre = StringField('Nombre completo',
+						 validators=[DataRequired(), Length(min=10, max=50)])
+
+	contacto = StringField('Teléfono',
+						   validators=[DataRequired(), Length(min=1, max=10)])
+
+	especialidad = StringField('Especialidad',
+									  validators=[DataRequired(), Length(min=1, max=50)])
+
+
+	submit = SubmitField('GUARDAR DOCTOR')

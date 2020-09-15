@@ -166,3 +166,8 @@ class conexion:
       cursor= self.ejecutar_query(query,"1")
       data = cursor.fetchall()
       return data
+
+    def insert_doctor(self, nombre, contacto, especialidad):
+      query=('INSERT INTO doctores (nombre, contacto, especialidad) '
+              f'VALUES ("{nombre}", "{contacto}","{especialidad}")')
+      self.ejecutar_query(query,"2")
