@@ -1,83 +1,67 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
-	<div class="cards">
-        <!-- aqui va el pack -->
-        <div class="card-body">
-            <form action="#" method="POST">
-                {{ form.hidden_tag() }}
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            {{form.nombre.label()}}
-                            {% if form.nombre.errors %}
-                                        {{form.nombre(class="form-control is-invalid", placeholder="Nombre")}}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.nombre.errors %}
-                                                <span>{{error}}</span>
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        {{form.nombre(class="form-control", placeholder="Nombre")}}
-                                    {% endif %}
+<div class="cards">
+    <!-- aqui va el pack -->
+    <div class="card-body">
+        <form action="#" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        {{form.nombre.label()}} {% if form.nombre.errors %} {{form.nombre(class="form-control is-invalid", placeholder="Nombre")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.nombre.errors %}
+                            <span>{{error}}</span> {% endfor %}
                         </div>
+                        {% else %} {{form.nombre(class="form-control", placeholder="Nombre")}} {% endif %}
                     </div>
                 </div>
-                <!-- --- -->
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            {{form.contacto.label()}}
-                            {% if form.contacto.errors %}
-                                        {{form.contacto(class="form-control is-invalid", placeholder="Teléfono")}}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.contacto.errors %}
-                                                <span>{{error}}</span>
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        {{form.contacto(class="form-control", placeholder="Teléfono")}}
-                                    {% endif %}
+            </div>
+            <!-- --- -->
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        {{form.contacto.label()}} {% if form.contacto.errors %} {{form.contacto(class="form-control is-invalid", placeholder="Teléfono")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.contacto.errors %}
+                            <span>{{error}}</span> {% endfor %}
                         </div>
+                        {% else %} {{form.contacto(class="form-control", placeholder="Teléfono")}} {% endif %}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            {{form.especialidad.label()}}
-                            {% if form.especialidad.errors %}
-                                        {{form.especialidad(class="form-control is-invalid", placeholder="Especialidad")}}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.cespecialidad.errors %}
-                                                <span>{{error}}</span>
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        {{form.especialidad(class="form-control", placeholder="Especialidad")}}
-                                    {% endif %}
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        {{form.especialidad.label()}} {% if form.especialidad.errors %} {{form.especialidad(class="form-control is-invalid", placeholder="Especialidad")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.cespecialidad.errors %}
+                            <span>{{error}}</span> {% endfor %}
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                        </div>
+                        {% else %} {{form.especialidad(class="form-control", placeholder="Especialidad")}} {% endif %}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            {{form.submit(class="btn bg-danger btn-lg btn-block")}}
-                        </div>
+                <div class="col">
+                    <div class="form-group">
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        {{form.submit(class="btn bg-danger btn-lg btn-block")}}
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
+</div>
 {% endblock content %}

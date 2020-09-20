@@ -1,6 +1,6 @@
 import mysql.connector 
 from proyecto.users import user
-
+from datetime import date
 from proyecto import login_manager
 
 @login_manager.user_loader
@@ -171,3 +171,43 @@ class conexion:
       query=('INSERT INTO doctores (nombre, contacto, especialidad) '
               f'VALUES ("{nombre}", "{contacto}","{especialidad}")')
       self.ejecutar_query(query,"2")
+    
+    def select_nombre_pacientes(self):
+      query="SELECT nombre FROM paciente"
+      cursor= self.ejecutar_query(query,"1")
+      data = cursor.fetchall()
+      return data
+    
+    def select_examenes(self):
+      query= "SELECT * from examen"
+      cursor= self.ejecutar_query(query,"1")
+      data = cursor.fetchall()
+      return data
+
+    def insert_examen(self,comentario,id_doctor,nombre_paciente,id_examen):
+      
+      try:
+        id_paciente = self.get_id_paciente(nombre_paciente)
+        
+        if id_paciente:
+          today = date.today()
+          d1 = today.strftime("%Y-%m-%d")
+          query=('INSERT INTO historial (fecha, comentario, idDoctor, idPaciente, idExamen)'
+              f'VALUES ("{d1}", "{comentario}","{id_doctor}","{id_paciente}","{id_examen}")')
+          self.ejecutar_query(query,"2")
+          return True
+        else:
+          return False
+      except:
+        return False
+      
+    
+    def get_id_paciente(self,nombre):
+      try:
+        query= f'Select idPaciente FROM paciente WHERE nombre = "{nombre}"'
+        cursor= self.ejecutar_query(query,"1")
+        resultado = cursor.fetchone()
+        id_usuario= str(resultado[0])
+        return id_usuario
+      except:
+        return False

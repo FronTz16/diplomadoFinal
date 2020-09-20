@@ -1,12 +1,12 @@
 from flask import Flask, render_template, url_for,flash, redirect, request
 from flask_wtf import form
-from proyecto.forms import registration_form, login_form, model_form, editar_pedido_form, tela_form,nota_form, nuevo_paciente_form
+from proyecto.forms import registration_form, login_form, model_form, editar_pedido_form, tela_form,nota_form, nuevo_paciente_form, solicitar_examen_form
 from proyecto.forms import nuevo_doctor_form
 from proyecto.conection import conexion, user
 from proyecto import app, bcrypt
 from proyecto.users import user
 from flask_login import login_user, current_user, logout_user, login_required
-
+from flask import jsonify
 
 @app.route('/dashboard',methods=['GET','POST'])
 @login_required
@@ -15,42 +15,6 @@ def dashboard():
 	return render_template('dashboard.html', title="Dashboard")
 
 #LISTO
-@app.route('/login',methods=['GET','POST'])
-def login():
-    form=login_form()
-    if form.validate_on_submit():
-        conn=conexion()
-        where="emailUsuario='"+form.email.data+"'"
-		#Se crea el objeto usuario y se almacena en la variable usuario
-        usuario=conn.select("*","usuarios",where,"1")
-		#Se comprueba que las contraseñas coincidan
-        if bcrypt.check_password_hash(usuario.contraseña,form.password.data):
-            login_user(usuario)
-            return redirect(url_for('dashboard'))
-        else:
-            flash('Email o contraseña Incorrectos, Verifica', 'danger')
-    return render_template('index.html', form=form,title="Login")
-
-#LISTO
-@app.route('/registro',methods=['GET','POST'])
-#@login_required
-def registro():
-	print("REGISTRO")
-	form = registration_form()
-
-	if form.validate_on_submit():
-
-		nombres=form.nombres.data
-		apellidos=form.apellidos.data
-		email=form.email.data
-		privilegios=form.privilegios.data
-		h_password=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-		conn=conexion()
-		conn.insert_usuarios(nombres,apellidos,h_password, email, privilegios )
-		flash('Se ha creado correctamente el usuario', 'success')
-		return redirect(url_for('usuarios'))
-
-	return render_template('crear_usuario.html', form=form, title="registro")
 
 #LISTO
 @app.route('/crear_modelo',methods=['GET','POST'])
@@ -196,7 +160,44 @@ def graficas():
 
 	return render_template('graficas.html', title="Graficas")
 
-# inicio de la base -----
+# ========================================== Inicio Parte Medica ======================================================
+@app.route('/login',methods=['GET','POST'])
+def login():
+    form=login_form()
+    if form.validate_on_submit():
+        conn=conexion()
+        where="emailUsuario='"+form.email.data+"'"
+		#Se crea el objeto usuario y se almacena en la variable usuario
+        usuario=conn.select("*","usuarios",where,"1")
+		#Se comprueba que las contraseñas coincidan
+        if bcrypt.check_password_hash(usuario.contraseña,form.password.data):
+            login_user(usuario)
+            return redirect(url_for('base'))
+        else:
+            flash('Email o contraseña Incorrectos, Verifica', 'danger')
+    return render_template('index.html', form=form,title="Login")
+
+#LISTO
+@app.route('/registro',methods=['GET','POST'])
+#@login_required
+def registro():
+
+	form = registration_form()
+
+	if form.validate_on_submit():
+
+		nombres=form.nombres.data
+		apellidos=form.apellidos.data
+		email=form.email.data
+		privilegios=form.privilegios.data
+		h_password=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+		conn=conexion()
+		conn.insert_usuarios(nombres,apellidos,h_password, email, privilegios )
+		flash('Se ha creado correctamente el usuario', 'success')
+		return redirect(url_for('usuarios'))
+
+	return render_template('crear_usuario.html', form=form, title="registro")
+
 @app.route('/base')
 #@login_required
 def base():
@@ -257,7 +258,6 @@ def nuevoDoctor():
 	form = nuevo_doctor_form()
 
 	if form.validate_on_submit():
-		print("AGREGAR")
 		nombre = form.nombre.data
 		contacto = form.contacto.data
 		especialidad = form.especialidad.data
@@ -267,3 +267,45 @@ def nuevoDoctor():
 		return redirect(url_for('base'))
 
 	return render_template('nuevo_doctor.html', form=form, title="Nuevo Doctor")
+
+#========= Realizar Examen =========
+@app.route('/nuevo_examen', methods=['GET','POST'])
+@login_required
+def solicitar_examen():
+	if current_user.id_tipo == 1:
+		conn = conexion()
+		examenes = conn.select_examenes()
+		form = solicitar_examen_form()
+
+		if form.is_submitted():
+			
+			comentario = form.comentarios_doctor.data
+			id_doctor = current_user.id
+			id_examen = int(request.form['id_examen'])
+			nombre_paciente = form.nombre_paciente.data
+			result = conn.insert_examen(comentario, id_doctor, nombre_paciente, id_examen)
+			print("Bandera")
+			if result == True:
+				flash('Se ha registrado el examen correctamente', 'success')
+				return redirect(url_for('base'))
+			else:
+				flash('Ocurrio un error vuelva a intentar', 'danger')
+				return redirect(url_for('base'))
+
+		return render_template('realizar_examen.html', exams=examenes, form=form, title="Nuevo Examen")
+	else:
+		flash('No tienes acceso a la url ingresada', 'danger')
+		return redirect(url_for('base'))
+
+# @app.route('/registar_nuevo_examen', methods=['GET', 'POST'])
+# @login_required
+# def crear_examen():
+
+@app.route('/autocomplete',methods=['GET'])
+def autocomplete():
+    conn = conexion()
+    pacientes = conn.select_nombre_pacientes()
+    resultList = []  
+    for data_out in pacientes:  
+        resultList.append(data_out[0])
+    return jsonify(json_list=resultList) 
