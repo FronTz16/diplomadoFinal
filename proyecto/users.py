@@ -3,7 +3,7 @@ from proyecto import login_manager
 
 class user(UserMixin):
 	"""docstring for user"""
-	def __init__(self,id, nombre, apellido, id_tipo, contraseña, correo):
+	def __init__(self,id, nombre, apellido, correo, contraseña, id_tipo):
 
 		self.id = id
 		self.nombre= nombre

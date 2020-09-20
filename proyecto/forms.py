@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,SubmitField, BooleanField, SelectField,IntegerField, DecimalField,FileField, DateField
+from wtforms import StringField,PasswordField,SubmitField, BooleanField, SelectField,IntegerField, DecimalField,FileField, DateField,TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 class registration_form(FlaskForm):
@@ -141,7 +141,7 @@ class nuevo_paciente_form(FlaskForm):
 	transitorio = SelectField('Status',
 		                                choices=[
 										            ('si','si'),
-										            ('nel','nel')])					
+													('nel','nel')])					
     
 	submit= SubmitField('GUARDAR PACIENTE')
 
@@ -158,3 +158,11 @@ class nuevo_doctor_form(FlaskForm):
 
 
 	submit = SubmitField('GUARDAR DOCTOR')
+
+class solicitar_examen_form(FlaskForm):
+    nombre_paciente = StringField('Nombre Paciente',
+									validators=[DataRequired(), Length(min=10, max=50)],id="nombre_paciente")
+    
+    comentarios_doctor = TextAreaField('Comentarios')
+    
+    submit = SubmitField('Solicitar Examen')
