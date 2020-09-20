@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 06, 2020 at 10:32 PM
+-- Generation Time: Sep 21, 2020 at 12:34 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -162,6 +162,13 @@ CREATE TABLE `historial` (
   `idExamen` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `historial`
+--
+
+INSERT INTO `historial` (`idHistorial`, `fecha`, `comentario`, `idDoctor`, `idPaciente`, `idExamen`) VALUES
+(5, '2020-09-20', 'Prueba', 8, 1, 3);
+
 -- --------------------------------------------------------
 
 --
@@ -188,7 +195,8 @@ CREATE TABLE `paciente` (
 --
 
 INSERT INTO `paciente` (`idPaciente`, `nombre`, `fechaNacimiento`, `sexo`, `lugarNaimiento`, `curp`, `grupoSanguineo`, `enfermedadesPre`, `alergias`, `contacto`, `contactoReferencia`, `transitorio`) VALUES
-(1, 'hugo', '2020-09-05', 'm', 'qro', 'asdfghj', 'a', '-', '-', '425156', '4444', 0);
+(1, 'hugo', '2020-09-05', 'm', 'qro', 'asdfghj', 'a', '-', '-', '425156', '4444', 0),
+(2, 'BIcho', '2020-09-08', 'm', 'obrera', '-', '-', '-', '-', '-', '-', 0);
 
 -- --------------------------------------------------------
 
@@ -231,7 +239,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`idUsuario`, `nombreUsuario`, `apellidoUsuario`, `emailUsuario`, `password`, `id_tipo`) VALUES
-(1, 'david', 'chavez', 'bicho@uaq.mx', '123', 1);
+(1, 'david', 'chavez', 'bicho@uaq.mx', '123', 1),
+(8, 'Hugo', 'Villafuerte', 'hhav21@outlook.com', '$2b$12$EjdR07sarlMmOLCA3e7HX.CahxU3PU6.JgXm.YI/E0TyidG44pZBe', 1);
 
 --
 -- Indexes for dumped tables
@@ -302,7 +311,7 @@ ALTER TABLE `tipo_usuario`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`idUsuario`),
-  ADD UNIQUE KEY `id_tipo` (`id_tipo`) USING BTREE;
+  ADD KEY `id_tipo` (`id_tipo`) USING BTREE;
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -348,13 +357,13 @@ ALTER TABLE `habitacion`
 -- AUTO_INCREMENT for table `historial`
 --
 ALTER TABLE `historial`
-  MODIFY `idHistorial` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idHistorial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `paciente`
 --
 ALTER TABLE `paciente`
-  MODIFY `idPaciente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idPaciente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tipo_usuario`
@@ -366,7 +375,7 @@ ALTER TABLE `tipo_usuario`
 -- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
