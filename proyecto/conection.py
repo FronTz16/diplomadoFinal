@@ -17,7 +17,7 @@ class conexion:
 
     def __init__(self):
       self.ht="localhost"
-      self.db="iDoctor"
+      self.db="iDoctorv2"
       self.usuario="root"
       self.password=""
 
@@ -206,6 +206,16 @@ class conexion:
       try:
         query= f'Select idPaciente FROM paciente WHERE nombre = "{nombre}"'
         cursor= self.ejecutar_query(query,"1")
+        resultado = cursor.fetchone()
+        id_usuario= str(resultado[0])
+        return id_usuario
+      except:
+        return False
+    
+    def get_historial_examenes(self):
+      try:
+        query= f'Select * h.idHistorial,h.fecha, d.idDoctor, p.idPaciente, e.idExamen FROM historial as h INNER JOIN doctores as d INNER JOIN pacientes as p INNER JOIN examen as e'
+        cursor= self.ejecutar_query(query,"1")#from pedidos as p inner join prenda as pr INNER'
         resultado = cursor.fetchone()
         id_usuario= str(resultado[0])
         return id_usuario
