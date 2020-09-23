@@ -108,7 +108,7 @@ ul i:hover{
     color: #CD5070;
 }
 .btn{
-    color: white;
+    color: white !important;
     background-color: #CD5070 !important;
 }
 .btn:hover{
@@ -250,3 +250,11 @@ background-color: white;
         padding: 0 !important;
         font-size: 15px;
     }
+
+.p-tr{
+    padding-top:1.5%;
+}
+.btn-per-green{
+    background-color:green !important; 
+    color:white !important
+}

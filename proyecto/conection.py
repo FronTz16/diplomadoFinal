@@ -17,7 +17,7 @@ class conexion:
 
     def __init__(self):
       self.ht="localhost"
-      self.db="iDoctor"
+      self.db="iDoctorv2"
       self.usuario="root"
       self.password=""
 
@@ -173,13 +173,14 @@ class conexion:
       self.ejecutar_query(query,"2")
     
     def select_nombre_pacientes(self):
-      query="SELECT nombre FROM paciente"
+      query="SELECT nombreCompleto FROM pacientes"
       cursor= self.ejecutar_query(query,"1")
       data = cursor.fetchall()
       return data
-    
+
+    #======================================= EXAMENES ========================================
     def select_examenes(self):
-      query= "SELECT * from examen"
+      query= "SELECT * from examenes"
       cursor= self.ejecutar_query(query,"1")
       data = cursor.fetchall()
       return data
@@ -188,12 +189,12 @@ class conexion:
       
       try:
         id_paciente = self.get_id_paciente(nombre_paciente)
-        
         if id_paciente:
           today = date.today()
           d1 = today.strftime("%Y-%m-%d")
-          query=('INSERT INTO historial (fecha, comentario, idDoctor, idPaciente, idExamen)'
-              f'VALUES ("{d1}", "{comentario}","{id_doctor}","{id_paciente}","{id_examen}")')
+          query=('INSERT INTO historialExamenes (fechaSolicitud, comentario, idUsuario, idPaciente, idExamen,status)'
+              f'VALUES ("{d1}", "{comentario}","{id_doctor}","{id_paciente}","{id_examen}","0")')
+          print("QUERY",query)
           self.ejecutar_query(query,"2")
           return True
         else:
@@ -204,10 +205,42 @@ class conexion:
     
     def get_id_paciente(self,nombre):
       try:
-        query= f'Select idPaciente FROM paciente WHERE nombre = "{nombre}"'
+        query= f'Select idPaciente FROM pacientes WHERE nombreCompleto = "{nombre}"'
         cursor= self.ejecutar_query(query,"1")
         resultado = cursor.fetchone()
         id_usuario= str(resultado[0])
         return id_usuario
+      except:
+        return False
+    
+    def get_historial_examenes(self):
+      try:
+        query= ('Select h.idHistorialExamen, h.fechaSolicitud, u.nombreUsuario, u.apellidoUsuario, p.nombreCompleto, '
+                ' e.nombre, h.status FROM historialExamenes as h INNER JOIN usuarios as u INNER JOIN pacientes as p '
+                ' INNER JOIN examenes as e WHERE h.idUsuario=u.idUsuario AND h.idPaciente = p.idPaciente '
+                ' AND h.idExamen= e.idExamen')
+        cursor= self.ejecutar_query(query,"1")
+        examenes = cursor.fetchall()
+        return examenes
+      except:
+        return False
+
+    def select_examen(self,id):
+      query= ("Select h.idHistorialExamen, h.fechaSolicitud, u.nombreUsuario, u.apellidoUsuario, p.nombreCompleto," 
+              "e.nombre, h.resultados FROM historialExamenes as h INNER JOIN usuarios as u INNER JOIN pacientes as p "
+              f"INNER JOIN examenes as e WHERE h.idHistorialExamen = {id} AND h.idUsuario=u.idUsuario AND "
+              "h.idPaciente = p.idPaciente AND h.idExamen= e.idExamen")
+      cursor= self.ejecutar_query(query,"1")
+      data = cursor.fetchall()
+      return data
+
+    def get_examenes_pendientes(self):
+      try:
+        query= ('Select h.idHistorialExamen, h.fechaSolicitud, u.nombreUsuario, u.apellidoUsuario,'
+                  'e.nombre FROM historialExamenes as h INNER JOIN usuarios as u '
+                  'INNER JOIN examenes as e WHERE h.status = 0 AND  h.idUsuario=u.idUsuario AND h.idExamen= e.idExamen')
+        cursor= self.ejecutar_query(query,"1")
+        examenes = cursor.fetchall()
+        return examenes
       except:
         return False

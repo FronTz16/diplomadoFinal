@@ -1,7 +1,68 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
-	<div class="cards">
-        <!-- aqui va el pack -->
+<div class="cards">
+    <!-- aqui va el pack -->
+    <div class="card-body">
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %} {% endif %} {% endwith %}
+        <form action="#" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+
+                        {{form.nombre_paciente.label()}} {{form.nombre_paciente(class="form-control", placeholder="Nombre Paciente")}}
+                        <a href="{{url_for('nuevoPaciente')}}" class="badge badge-primary">Registrar Nuevo Paciente</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Seleccione un tipo de examen</label>
+                        <select class="form-control" name="id_examen">
+                            {% for exam in exams %}
+    
+                                <option value="{{ exam.0 }}">{{ exam.1 }}</option>
+    
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        {{form.comentarios_doctor.label()}} {{form.comentarios_doctor(class="form-control", placeholder="Comentarios(Opcional)")}}
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    {{form.submit(class="btn bg-danger btn-lg btn-block")}}
+                </div>
+            </div>
+        </form>
     </div>
+</div>
+
+
+<script>
+    $(function() {
+        $.ajax({
+            url: '{{ url_for("autocomplete_paciente_nombre") }}'
+        }).done(function(data) {
+            $('#nombre_paciente').autocomplete({
+                source: data.json_list,
+                minLength: 2
+            });
+        });
+    });
+</script>
 {% endblock content %}

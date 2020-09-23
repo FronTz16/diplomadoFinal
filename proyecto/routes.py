@@ -268,7 +268,7 @@ def nuevoDoctor():
 
 	return render_template('nuevo_doctor.html', form=form, title="Nuevo Doctor")
 
-#========= Realizar Examen =========
+#================================= EXAMENES STUFF ================================
 @app.route('/nuevo_examen', methods=['GET','POST'])
 @login_required
 def solicitar_examen():
@@ -284,15 +284,14 @@ def solicitar_examen():
 			id_examen = int(request.form['id_examen'])
 			nombre_paciente = form.nombre_paciente.data
 			result = conn.insert_examen(comentario, id_doctor, nombre_paciente, id_examen)
-			print("Bandera")
 			if result == True:
 				flash('Se ha registrado el examen correctamente', 'success')
-				return redirect(url_for('base'))
+				return redirect(url_for('solicitar_examen'))
 			else:
 				flash('Ocurrio un error vuelva a intentar', 'danger')
-				return redirect(url_for('base'))
+				return redirect(url_for('solicitar_examen'))
 
-		return render_template('realizar_examen.html', exams=examenes, form=form, title="Nuevo Examen")
+		return render_template('nuevo_examen.html', exams=examenes, form=form, title="Nuevo Examen")
 	else:
 		flash('No tienes acceso a la url ingresada', 'danger')
 		return redirect(url_for('base'))
@@ -301,11 +300,51 @@ def solicitar_examen():
 # @login_required
 # def crear_examen():
 
-@app.route('/autocomplete',methods=['GET'])
-def autocomplete():
+@app.route('/autocomplete_paciente_nombre',methods=['GET'])
+@login_required
+def autocomplete_paciente_nombre():
     conn = conexion()
     pacientes = conn.select_nombre_pacientes()
     resultList = []  
     for data_out in pacientes:  
         resultList.append(data_out[0])
-    return jsonify(json_list=resultList) 
+    return jsonify(json_list=resultList)
+
+@app.route('/historial_examenes',methods=['GET','POST'])
+@login_required
+def ver_historial_examenes():
+
+	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
+		conn = conexion()
+		historial = conn.get_historial_examenes()
+		
+		return render_template('historial_examenes.html', historial=historial, form=form, title="Historial Examenes")
+	else:
+		flash('No tienes acceso a la url ingresada', 'danger')
+		return redirect(url_for('base'))
+
+@app.route("/ver_examen/id/<id>")
+@login_required
+def ver_examen(id):
+
+	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
+		conn=conexion()
+		examen = conn.select_examen(id)
+	else:
+		flash('No tienes acceso a la url ingresada', 'danger')
+		return redirect(url_for('base'))
+
+	return render_template('ver_resultados_examen.html', examen = examen, title='Resultados')
+
+@app.route('/examenes_pendientes',methods=['GET','POST'])
+@login_required
+def examenes_pendientes():	
+
+	if current_user.id_tipo == 1: #cambiar el valor a 3 al terminar
+		conn = conexion()
+		examenes_pend = conn.get_examenes_pendientes()
+		print("EXAMENES:",examenes_pend)
+		return render_template('examenes_pendientes.html', examenes=examenes_pend, title="Examenes Pendientes")
+	else:
+		flash('No tienes acceso a la url ingresada', 'danger')
+		return redirect(url_for('base'))

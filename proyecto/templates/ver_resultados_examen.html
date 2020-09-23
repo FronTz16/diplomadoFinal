@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block content %}
+
+
+    <div class="card text-center" style="margin-left:15rem;margin-top:5rem; width: 50rem;">
+        <div class="card-header">
+            Resultados Examen No. {{examen.0.0}}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{examen.0.4}}</h5>
+            <p class="card-text">Solicitado por el Dr {{examen.0.2}} {{examen.0.3}}</p>
+            <p class="card-text font-weight-bold">{{examen.0.5}}</p>
+            <p class="card-text">Resultados:</p>
+            <p class="card-text">{{examen.0.6}}</p>
+            <a href="{{url_for('ver_historial_examenes')}}" class="btn btn-primary">Regresar</a>
+        </div>
+        <div class="card-footer text-muted">
+            Solicitado el {{examen.0.1}} (Año-Mes-Dia)
+        </div>
+    </div>
+
+{% endblock content %}

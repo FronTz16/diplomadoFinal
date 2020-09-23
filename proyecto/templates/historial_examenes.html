@@ -1,0 +1,59 @@
+{% extends "base.html" %} 
+{% block content %}
+<!------------------------------------------------------ Datatables -------------------------------------------->
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+<!-- aqui va el pack -->
+<div class="cards" >
+    <div class="card-body">
+        <table id="example" class="table" style="width:100%">
+            <thead class=" table-active">
+                <tr style="display: none;">
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <button onclick="window.location.href='{{url_for('solicitar_examen')}}';" class="btn btn-lg btn-block" 
+                    style="margin-bottom:2%;color:white;">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                    </svg>
+                    Solicitar Nuevo Examen
+                </button>
+                {% for exam in historial %}
+                <tr class="{% if exam.6 == 0%} table-warning {%else%} table-success{%endif%}">
+                    <td colspan="5" style="padding-top:1.5%; color:#666b70;">{{exam.1}} | FOLIO:{{exam.0}} | {{exam.5}} ({{exam.4}})</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        {% if exam.6 == 0%} 
+                        <button class="btn btn-block" style="background-color:#f2b062 !important;">Pendiente</button>
+                        {%else%} 
+                            <button class="btn btn-block" style="background-color:#45ba8c !important;"  onclick="window.location.href='{{url_for('ver_examen',id=exam.0)}}';">Entregado</button>
+                        {%endif%}
+                    </td>
+                </tr>
+    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    });
+</script>
+{% endblock content %}
