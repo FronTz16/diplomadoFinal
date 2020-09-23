@@ -12,16 +12,17 @@
         </div>
         <div class="info">
             <div class="tt1">
-                <p>{{ data.0 }}</p>
+                <p>{{ data.1 }}</p>
             </div>
             <div class="tt">
-                <p>{{data.2}} años</p>
+                <p>{{data.3}} años</p>
             </div>
             <div class="tt2">
-                <p>{{data.1}}</p>
+                <p>{{data.2}}</p>
             </div>
             <div class="tt">
-                <button class=" btn btn-danger btn-lg">Historial</button>
+                <a href="{{url_for('historial_paciente', id=data.0)}}" class="btn btn-danger btn-lg">Historial</a>
+                <!-- <button class=" btn btn-danger btn-lg" href="{{url_for('nuevoPaciente')}}">Historial</button> -->
             </div>
 
         </div>

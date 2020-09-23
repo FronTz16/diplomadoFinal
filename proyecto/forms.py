@@ -104,8 +104,9 @@ class nuevo_paciente_form(FlaskForm):
 
 	sexo = SelectField('Genero',
 		                    choices=[
-										('Hombre','Hombre'),
-										('Mujer','Mujer')])
+										('M','Mujer'),
+										('H','Hombre')
+										],default=1)
 
 	lugar_nacimiento = SelectField('Lugar de nacimiento',
 		                                choices=[
@@ -132,6 +133,9 @@ class nuevo_paciente_form(FlaskForm):
 	alergias = StringField('Alergias',
 							validators=[DataRequired(),Length(min=1, max=20)])
 						
+	direccion = StringField('Dirección',
+	                        validators=[DataRequired(),Length(min=1, max=100)])
+						
 	contacto = StringField('Teléfono',
 	                        validators=[DataRequired(),Length(min=1, max=10)])
 
@@ -140,8 +144,8 @@ class nuevo_paciente_form(FlaskForm):
 
 	transitorio = SelectField('Status',
 		                                choices=[
-										            ('si','si'),
-													('nel','nel')])					
+										            ('1','Transitorio'),
+													('2','Internado')])					
     
 	submit= SubmitField('GUARDAR PACIENTE')
 
@@ -166,12 +170,3 @@ class solicitar_examen_form(FlaskForm):
     comentarios_doctor = TextAreaField('Comentarios')
     
     submit = SubmitField('Solicitar Examen')
-
-
-class crear_consulta_form(FlaskForm):
-
-	id_consultorio = TextAreaField('Id consultorio')
-	id_paciente = TextAreaField('Id paciente')
-	fecha = DateField('Fecha')
-	hora = TextAreaField('Hora')
-	submit = SubmitField('Crear consulta')
