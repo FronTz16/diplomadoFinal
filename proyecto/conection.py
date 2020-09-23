@@ -87,7 +87,7 @@ class conexion:
 
 
     def insert_usuarios(self, nombre, apellidos, password, email, id_tipo):
-      query=('INSERT INTO usuarios (nombreUsuario, apellidoUsuario, emailUsuario, password, id_tipo) '
+      query=('INSERT INTO usuarios (nombreUsuario, apellidoUsuario, emailUsuario, password, idTipo) '
               f'VALUES ("{nombre}", "{apellidos}","{email}","{password}","{id_tipo}")')
       print("QUERY--------------------------",query)
       self.ejecutar_query(query,"2")
@@ -211,3 +211,11 @@ class conexion:
         return id_usuario
       except:
         return False
+
+
+    def insert_consulta(self, id_consultorio, id_paciente, fecha, hora):
+      query=('INSERT INTO consultas (idConsultorio, idPaciente, fecha, hora) '
+              f'VALUES ("{id_consultorio}","{id_paciente}","{fecha}","{hora}")')
+      print(query)
+
+      self.ejecutar_query(query,"2")

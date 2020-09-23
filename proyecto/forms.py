@@ -166,3 +166,12 @@ class solicitar_examen_form(FlaskForm):
     comentarios_doctor = TextAreaField('Comentarios')
     
     submit = SubmitField('Solicitar Examen')
+
+
+class crear_consulta_form(FlaskForm):
+
+	id_consultorio = TextAreaField('Id consultorio')
+	id_paciente = TextAreaField('Id paciente')
+	fecha = DateField('Fecha')
+	hora = TextAreaField('Hora')
+	submit = SubmitField('Crear consulta')
