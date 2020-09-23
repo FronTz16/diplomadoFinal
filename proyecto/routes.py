@@ -361,30 +361,30 @@ def examenes_pendientes():
 		flash('No tienes acceso a la url ingresada', 'danger')
 		return redirect(url_for('base'))
 
-	@app.route('/nueva_consulta', methods=['GET', 'POST'])
-	@login_required
-	def nuevaConsulta():
+@app.route('/nueva_consulta', methods=['GET', 'POST'])
+@login_required
+def nuevaConsulta():
 
-		if current_user.id_tipo == 1 or current_user.id_tipo == 2:
-			conn = conexion()
-			form = crear_consulta_form()
+	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
+		conn = conexion()
+		form = crear_consulta_form()
 
-			if form.is_submitted():
+		if form.is_submitted():
 
-				id_paciente = form.id_paciente.data
-				id_consultorio = form.id_consultorio.data
-				fecha = form.fecha.data
-				hora = form.hora.data
-				result = conn.insert_consulta(id_paciente, id_consultorio, fecha, hora)
-				print("Bandera")
-				if result == True:
-					flash('Se ha registrado la consulta correctamente', 'success')
-					return redirect(url_for('base'))
-				else:
-					flash('Ocurrio un error vuelva a intentar', 'danger')
-					return redirect(url_for('base'))
+			id_paciente = form.id_paciente.data
+			id_consultorio = form.id_consultorio.data
+			fecha = form.fecha.data
+			hora = form.hora.data
+			result = conn.insert_consulta(id_paciente, id_consultorio, fecha, hora)
+			print("Bandera")
+			if result == True:
+				flash('Se ha registrado la consulta correctamente', 'success')
+				return redirect(url_for('base'))
+			else:
+				flash('Ocurrio un error vuelva a intentar', 'danger')
+				return redirect(url_for('base'))
 
-			return render_template('nueva_consulta.html', form=form, title="Nuevo Examen")
-		else:
-			flash('No tienes acceso a la url ingresada', 'danger')
-			return redirect(url_for('base'))
+		return render_template('nueva_consulta.html', form=form, title="Nuevo Examen")
+	else:
+		flash('No tienes acceso a la url ingresada', 'danger')
+		return redirect(url_for('base'))
