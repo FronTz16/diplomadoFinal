@@ -236,7 +236,17 @@ class conexion:
         return id_usuario
       except:
         return False
-    
+
+
+
+    def insert_consulta(self, id_consultorio, id_paciente, fecha, hora):
+      query=('INSERT INTO consultas (idConsultorio, idPaciente, fecha, hora) '
+              f'VALUES ("{id_consultorio}","{id_paciente}","{fecha}","{hora}")')
+      print(query)
+
+      self.ejecutar_query(query,"2")
+
+
     def get_historial_examenes(self):
       try:
         query= ('Select h.idHistorialExamen, h.fechaSolicitud, u.nombreUsuario, u.apellidoUsuario, p.nombreCompleto, '
