@@ -2,6 +2,102 @@
 {% block content %}
 
 	<div class="cards">
-        <!-- aqui va el pack -->
-    </div>
+        <div class="card-body">
+            <div class="row"><h2>Información del paciente</h2></div>
+            <div class="row">
+                <div class="col">
+                    <p>Nombre: <span>{{info.0.0}}</span></p>
+                </div>
+                <div class="col">
+                    <p>Sexo: <span>{{info.0.1}}</span></p>
+                </div>
+                <div class="col">
+                    <p>Edad: <span>{{info.0.7}}</span></p>
+                </div>
+                <div class="col">
+                    <p>Contacto <span>{{info.0.6}}</span></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <p>Tipo de sangre: <span>{{info.0.2}}</span></p>
+                </div>
+                <div class="col">
+                    <p>Preexistencias: <span>{{info.0.3}}</span></p>
+                </div>
+                <div class="col">
+                    <p>Alergias: <span>{{info.0.4}}</span></p>
+                </div>
+                <div class="col">
+                </div>
+            </div>
+
+            </div>
+        </div>
+        <!-- ----------- -->
+        <div class="cards">
+            <div class="card-body">
+                <div class="row"><h2>Internados</h2></div>
+                {% for inter in inter %}
+                <div class="row">
+                    <div class="col">
+                        <p>Estuvo en la habitación: <span>{{inter.0}}</span></p>
+                    </div>
+                    <div class="col">
+                        <p>Ingreso el: <span>{{inter.1}}</span></p>
+                    </div>
+                    <div class="col">
+                        <p>Fue dado de alta el: <span>{{inter.2}}</span></p>
+                    </div>
+                    <div class="col">
+                        <p>Tipo de internado: <span>{{inter.3}}</span></p>
+                    </div>
+                </div>
+                {% endfor %}
+                </div>
+            </div>
+            <!-- ---------------- -->
+            <div class="cards">
+                <div class="card-body">
+                    <div class="row"><h2>Consultas</h2></div>
+                    {% for consu in consu %}
+                    <div class="row">
+                        <div class="col">
+                            <p>Fue atendido por: <span>{{consu.0}}</span></p>
+                        </div>
+                        <div class="col">
+                            <p>En la siguiente fecha: <span>{{consu.1}}</span></p>
+                        </div>
+                        <div class="col">
+                            <p>En la siguiente hora: <span>{{consu.2}}</span></p>
+                        </div>
+                        <div class="col">
+                            <p>Con diagnostico: <span>{{consu.3}}</span></p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            <!-- -------------- -->
+            <div class="cards">
+                <div class="card-body">
+                    <div class="row"><h2>Exámenes</h2></div>
+                    {% for exa in exa %}
+                    <div class="row">
+                        <div class="col">
+                            <p>Fecha solicitado: <span>{{exa.0}}</span></p>
+                        </div>
+                        <div class="col">
+                            <p>Tipo de exámen: <span>{{exa.1}}</span></p>
+                        </div>
+                        <div class="col">
+                            <p>Resultados del exámen: <span>{{exa.2}}</span></p>
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
+                    {% endfor %}
+                    </div>
+                </div>
 {% endblock content %}
