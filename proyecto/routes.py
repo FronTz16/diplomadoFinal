@@ -301,14 +301,15 @@ def solicitar_examen():
 # @login_required
 # def crear_examen():
 
-@app.route('/autocomplete',methods=['GET'])
-def autocomplete():
+@app.route('/autocomplete_paciente_nombre',methods=['GET'])
+def autocomplete_paciente_nombre():
     conn = conexion()
     pacientes = conn.select_nombre_pacientes()
     resultList = []  
     for data_out in pacientes:  
         resultList.append(data_out[0])
     return jsonify(json_list=resultList)
+
 
 
 @app.route('/nueva_consulta', methods=['GET', 'POST'])
@@ -340,3 +341,16 @@ def nuevaConsulta():
 	else:
 		flash('No tienes acceso a la url ingresada', 'danger')
 		return redirect(url_for('base'))
+
+@app.route('/historial_examenes',methods=['GET','POST'])
+def ver_historial_examenes():
+
+	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
+		conn = conexion()
+		historial = conn.get_historial_examenes()
+
+		return render_template('historial_examenes.html', historial=historial, form=form, title="Historial Examenes")
+	else:
+		flash('No tienes acceso a la url ingresada', 'danger')
+		return redirect(url_for('base'))
+
