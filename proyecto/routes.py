@@ -213,7 +213,7 @@ def nuevoExamen():
 	return render_template('nuevo_examen.html', title="Graficas")
 #fin del ejemplo ------------------------
 
-# nuevo paciente ----------------------------------------------------------------
+# nuevo paciente ------------------
 @app.route('/nuevo_paciente',methods=['GET','POST'])
 #@login_required
 def nuevoPaciente():
@@ -232,16 +232,15 @@ def nuevoPaciente():
 		contacto=form.contacto.data
 		contacto_referencia=form.contacto_referencia.data
 		transitorio=form.transitorio.data
-		direccion=form.direccion.data
 		conn=conexion()
-		conn.insert_paciente(nombre, fecha_nacimiento, sexo, lugar_nacimiento, curp, tipo_sangre, pre_enfermedades, alergias, contacto, contacto_referencia, transitorio, direccion)
+		conn.insert_paciente(nombre, fecha_nacimiento, sexo, lugar_nacimiento, curp, tipo_sangre, pre_enfermedades, alergias, contacto, contacto_referencia, transitorio)
 		flash('Se agrego el paciente correctamente', 'success')
-		return redirect(url_for('misPacientes'))
+		return redirect(url_for('base'))
 
 
 	return render_template('nuevo_paciente.html', form=form ,title="Nuevo Paciente")
+#fin del ejemplo ------------------------
 
-# listado de pacientes----------------------------------------------------------
 @app.route('/mis_pacientes')
 #@login_required
 def misPacientes():
@@ -260,7 +259,7 @@ def historial_paciente(id):
 	inter = conn.select_pacientes_internado(id)
 	consu = conn.select_pacientes_consulta(id)
 	exa = conn.select_pacientes_examen(id)
-	
+
 	return render_template('historial_paciente.html', info = info , inter = inter, consu = consu, exa = exa, title="historial")
 
 
@@ -281,7 +280,7 @@ def nuevoDoctor():
 
 	return render_template('nuevo_doctor.html', form=form, title="Nuevo Doctor")
 
-#================================= EXAMENES STUFF ================================
+#========= Realizar Examen =========
 @app.route('/nuevo_examen', methods=['GET','POST'])
 @login_required
 def solicitar_examen():
@@ -297,6 +296,7 @@ def solicitar_examen():
 			id_examen = int(request.form['id_examen'])
 			nombre_paciente = form.nombre_paciente.data
 			result = conn.insert_examen(comentario, id_doctor, nombre_paciente, id_examen)
+			print("Bandera")
 			if result == True:
 				flash('Se ha registrado el examen correctamente', 'success')
 				return redirect(url_for('solicitar_examen'))
@@ -330,7 +330,7 @@ def ver_historial_examenes():
 	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
 		conn = conexion()
 		historial = conn.get_historial_examenes()
-		
+
 		return render_template('historial_examenes.html', historial=historial, form=form, title="Historial Examenes")
 	else:
 		flash('No tienes acceso a la url ingresada', 'danger')
@@ -351,11 +351,12 @@ def ver_examen(id):
 
 @app.route('/examenes_pendientes',methods=['GET','POST'])
 @login_required
-def examenes_pendientes():	
+def examenes_pendientes():
 
 	if current_user.id_tipo == 1: #cambiar el valor a 3 al terminar
 		conn = conexion()
 		examenes_pend = conn.get_examenes_pendientes()
+		print("EXAMENES:",examenes_pend)
 		return render_template('examenes_pendientes.html', examenes=examenes_pend, title="Examenes Pendientes")
 	else:
 		flash('No tienes acceso a la url ingresada', 'danger')
