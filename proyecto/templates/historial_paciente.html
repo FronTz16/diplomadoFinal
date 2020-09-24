@@ -2,34 +2,35 @@
 {% block content %}
 
 	<div class="cards">
-        <div class="card-body">
-            <div class="row"><h2>Información del paciente</h2></div>
+        <div class="card-body h">
+            <div class="row"><h3>Información del paciente</h3></div>
             <div class="row">
                 <div class="col">
-                    <p>Nombre: <span>{{info.0.0}}</span></p>
+                    <p>Nombre: <span>{{info.0.1}}</span></p>
                 </div>
                 <div class="col">
-                    <p>Sexo: <span>{{info.0.1}}</span></p>
+                    <p>Sexo: <span>{{info.0.2}}</span></p>
                 </div>
                 <div class="col">
-                    <p>Edad: <span>{{info.0.7}}</span></p>
+                    <p>Edad: <span>{{info.0.7}} años </span><span>({{info.0.8}})</span></p>
                 </div>
                 <div class="col">
-                    <p>Contacto <span>{{info.0.6}}</span></p>
+                    <p>Contacto: <span>{{info.0.4}}</span></p>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col">
-                    <p>Tipo de sangre: <span>{{info.0.2}}</span></p>
+                    <p>Tipo de sangre: <span>{{info.0.3}}</span></p>
                 </div>
                 <div class="col">
-                    <p>Preexistencias: <span>{{info.0.3}}</span></p>
+                    <p>Preexistencias: <span>{{info.0.4}}</span></p>
                 </div>
                 <div class="col">
-                    <p>Alergias: <span>{{info.0.4}}</span></p>
+                    <p>Alergias: <span>{{info.0.5}}</span></p>
                 </div>
                 <div class="col">
+                    <a href="{{url_for('nuevaConsulta', id=info.0.0)}}" class="btn btn-danger btn-lg">Generar consulta</a>
                 </div>
             </div>
 
@@ -37,11 +38,15 @@
         </div>
         <!-- ----------- -->
         <div class="cards">
-            <div class="card-body">
-                <div class="row"><h2>Internados</h2></div>
+            <div class="card-body h">
+                <div class="row"><h3>Internados</h3></div>
                 {% for inter in inter %}
                 <div class="row">
-                    <div class="col">
+                    <div class="col t">
+                        <p>Estuvo en la habitación: <span>{{inter.0}}</span><span class="es">  |  </span>el: <span>{{inter.1}}</span><span class="es"> | </span>
+                        dado de alta: <span>{{inter.2}}</span><span class="es"> | </span>Tipo de internado: <span>{{inter.3}}</span></p>
+                    </div>
+                    <!-- <div class="col">
                         <p>Estuvo en la habitación: <span>{{inter.0}}</span></p>
                     </div>
                     <div class="col">
@@ -52,18 +57,22 @@
                     </div>
                     <div class="col">
                         <p>Tipo de internado: <span>{{inter.3}}</span></p>
-                    </div>
+                    </div> -->
                 </div>
                 {% endfor %}
                 </div>
             </div>
             <!-- ---------------- -->
             <div class="cards">
-                <div class="card-body">
-                    <div class="row"><h2>Consultas</h2></div>
+                <div class="card-body h">
+                    <div class="row"><h3>Consultas</h3></div>
                     {% for consu in consu %}
                     <div class="row">
-                        <div class="col">
+                        <div class="col t">
+                            <p>Fue atendido por:  <span>{{consu.0}}</span><span class="es">  |  </span>fecha: <span>{{consu.1}}</span><span class="es"> | </span>
+                                hora: <span>{{consu.2}}</span><span class="es"> | </span>diagnostico: <span>{{consu.3}}</span></p>
+                        </div>
+                        <!-- <div class="col">
                             <p>Fue atendido por: <span>{{consu.0}}</span></p>
                         </div>
                         <div class="col">
@@ -74,18 +83,22 @@
                         </div>
                         <div class="col">
                             <p>Con diagnostico: <span>{{consu.3}}</span></p>
-                        </div>
+                        </div> -->
                     </div>
                     {% endfor %}
                     </div>
                 </div>
             <!-- -------------- -->
             <div class="cards">
-                <div class="card-body">
-                    <div class="row"><h2>Exámenes</h2></div>
+                <div class="card-body h">
+                    <div class="row"><h3>Exámenes</h3></div>
                     {% for exa in exa %}
                     <div class="row">
-                        <div class="col">
+                        <div class="col t">
+                            <p>Fecha solicitado: <span>{{exa.0}}</span><span class="es">  |  </span>Tipo de exámen: <span>{{exa.1}}</span><span class="es"> | </span>
+                                Resultados del exámen: <span>{{exa.2}}</span></p>
+                        </div>
+                        <!-- <div class="col">
                             <p>Fecha solicitado: <span>{{exa.0}}</span></p>
                         </div>
                         <div class="col">
@@ -95,7 +108,7 @@
                             <p>Resultados del exámen: <span>{{exa.2}}</span></p>
                         </div>
                         <div class="col">
-                        </div>
+                        </div> -->
                     </div>
                     {% endfor %}
                     </div>
