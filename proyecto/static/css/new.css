@@ -250,3 +250,31 @@ background-color: white;
         padding: 0 !important;
         font-size: 15px;
     }
+ .h{
+    padding: 0px !important;
+    padding-left: 1.25rem !important;
+}
+.h p{
+    font-size: 19px;
+    color: #5E6C7A;
+    font-weight: bolder;
+}
+.h span{
+    color: black;
+}
+.t {
+    margin-right: 1.5%;
+    border-radius: 5px;
+    background-color: #F7F8FA;
+    margin-bottom: 20px;
+}
+.t p{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.es{
+    color: #3589C2 !important;
+    font-weight: 900;
+    margin-right: 5px;
+    margin-left: 5px;
+}
