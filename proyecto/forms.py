@@ -128,6 +128,9 @@ class nuevo_paciente_form(FlaskForm):
 										
 	pre_enfermedades = StringField('Preexistenias',
 	                                validators=[DataRequired(),Length(min=1, max=50)])
+							
+	direccion = StringField('Dirección',
+							validators=[DataRequired(),Length(min=1, max=120)])
 	
 	alergias = StringField('Alergias',
 							validators=[DataRequired(),Length(min=1, max=20)])
@@ -170,8 +173,9 @@ class solicitar_examen_form(FlaskForm):
 
 class crear_consulta_form(FlaskForm):
 
-	id_consultorio = TextAreaField('Id consultorio')
-	id_paciente = TextAreaField('Id paciente')
+	id_consultorio = SelectField('Consultorio',
+		                                choices=[
+										            ('1','Consultorio mario')])
 	fecha = DateField('Fecha')
-	hora = TextAreaField('Hora')
+	hora = StringField('Hora')
 	submit = SubmitField('Crear consulta')

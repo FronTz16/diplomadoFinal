@@ -168,7 +168,7 @@ class conexion:
       return data
 
     def select_pacientes_info(self,id):
-      query="SELECT nombreCompleto, sexo, grupoSanguineo, enfermedadesPree, alergias, contactoPaciente, floor(datediff (now(), fechaNacimiento)/365) from pacientes WHERE idPaciente = ('%s')"%(id)
+      query="SELECT idPaciente, nombreCompleto, sexo, grupoSanguineo, enfermedadesPree, alergias, contactoPaciente, floor(datediff (now(), fechaNacimiento)/365), fechaNacimiento from pacientes WHERE idPaciente = ('%s')"%(id)
       cursor= self.ejecutar_query(query,"1")
       data = cursor.fetchall()
       return data
@@ -239,10 +239,10 @@ class conexion:
 
 
 
-    def insert_consulta(self, id_consultorio, id_paciente, fecha, hora):
+    def insert_consulta(self, id_consultorio, id, fecha, hora):
       query=('INSERT INTO consultas (idConsultorio, idPaciente, fecha, hora) '
-              f'VALUES ("{id_consultorio}","{id_paciente}","{fecha}","{hora}")')
-      print(query)
+              f'VALUES ("{id_consultorio}","{id}","{fecha}","{hora}")')
+      print("AQui========",query)
 
       self.ejecutar_query(query,"2")
 

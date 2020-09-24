@@ -236,7 +236,7 @@ def nuevoPaciente():
 		conn=conexion()
 		conn.insert_paciente(nombre, fecha_nacimiento, sexo, lugar_nacimiento, curp, tipo_sangre, pre_enfermedades, alergias, contacto, contacto_referencia, transitorio, direccion)
 		flash('Se agrego el paciente correctamente', 'success')
-		return redirect(url_for('base'))
+		return redirect(url_for('misPacientes'))
 
 
 	return render_template('nuevo_paciente.html', form=form ,title="Nuevo Paciente")
@@ -361,9 +361,9 @@ def examenes_pendientes():
 		flash('No tienes acceso a la url ingresada', 'danger')
 		return redirect(url_for('base'))
 
-@app.route('/nueva_consulta', methods=['GET', 'POST'])
+@app.route('/nueva_consulta/<id>', methods=['GET', 'POST'])
 @login_required
-def nuevaConsulta():
+def nuevaConsulta(id):
 
 	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
 		conn = conexion()
@@ -371,11 +371,10 @@ def nuevaConsulta():
 
 		if form.is_submitted():
 
-			id_paciente = form.id_paciente.data
 			id_consultorio = form.id_consultorio.data
 			fecha = form.fecha.data
 			hora = form.hora.data
-			result = conn.insert_consulta(id_paciente, id_consultorio, fecha, hora)
+			result = conn.insert_consulta(id_consultorio, id, fecha, hora)
 			print("Bandera")
 			if result == True:
 				flash('Se ha registrado la consulta correctamente', 'success')
