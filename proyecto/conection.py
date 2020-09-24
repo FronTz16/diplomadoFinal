@@ -17,7 +17,7 @@ class conexion:
 
     def __init__(self):
       self.ht="localhost"
-      self.db="iDoctor"
+      self.db="idoctorv2"
       self.usuario="root"
       self.password=""
 
@@ -156,13 +156,37 @@ class conexion:
 
 #insert de paciente   
 
-    def insert_paciente(self, nombre, fecha_nacimiento, sexo, lugar_nacimiento, curp, tipo_sangre, pre_enfermedades, alergias, contacto, contacto_referencia, transitorio):
-      query=('INSERT INTO paciente (nombre, fechaNacimiento, sexo, lugarNacimiento, curp, grupoSanguineo, enfermedadesPre, alergias, contacto, contactoReferencia, transitorio) '
-              f'VALUES ("{nombre}", "{fecha_nacimiento}","{sexo}","{lugar_nacimiento}","{curp}","{tipo_sangre}","{pre_enfermedades}","{alergias}","{contacto}","{contacto_referencia}","{transitorio}")')
+    def insert_paciente(self, nombre, fecha_nacimiento, sexo, lugar_nacimiento, curp, tipo_sangre, pre_enfermedades, alergias, contacto, contacto_referencia, transitorio, direccion):
+      query=('INSERT INTO pacientes (nombreCompleto, fechaNacimiento, sexo, lugarNacimiento, curp, grupoSanguineo, enfermedadesPree, alergias, contactoPaciente, contactoReferencias, idTipoPaciente, direccionPaciente) '
+              f'VALUES ("{nombre}", "{fecha_nacimiento}","{sexo}","{lugar_nacimiento}","{curp}","{tipo_sangre}","{pre_enfermedades}","{alergias}","{contacto}","{contacto_referencia}","{transitorio}", "{direccion}")')
       self.ejecutar_query(query,"2")
 
     def select_pacientes(self):
-      query="SELECT nombre, sexo, floor(datediff (now(), fechaNacimiento)/365) from paciente WHERE 1"
+      query="SELECT idPaciente, nombreCompleto, sexo, floor(datediff (now(), fechaNacimiento)/365) from pacientes WHERE 1"
+      cursor= self.ejecutar_query(query,"1")
+      data = cursor.fetchall()
+      return data
+
+    def select_pacientes_info(self,id):
+      query="SELECT idPaciente, nombreCompleto, sexo, grupoSanguineo, enfermedadesPree, alergias, contactoPaciente, floor(datediff (now(), fechaNacimiento)/365), fechaNacimiento from pacientes WHERE idPaciente = ('%s')"%(id)
+      cursor= self.ejecutar_query(query,"1")
+      data = cursor.fetchall()
+      return data
+
+    def select_pacientes_internado(self,id):
+      query="SELECT i.idHabitacion, i.fechaIngreso, i.fechaAlta, t.tipoInternado FROM internados as i, tipointernados as t WHERE i.idPaciente = ('%s') and i.idTipoInternado = t.idTipoInternado"%(id)
+      cursor= self.ejecutar_query(query,"1")
+      data = cursor.fetchall()
+      return data
+
+    def select_pacientes_consulta(self,id):
+      query="SELECT  u.nombreUsuario, fecha, hora, diagnostico FROM consultas as c, consultorios as con, usuarios as u WHERE c.idPaciente = ('%s') and con.idUsuario = u.idUsuario"%(id)
+      cursor= self.ejecutar_query(query,"1")
+      data = cursor.fetchall()
+      return data
+
+    def select_pacientes_examen(self,id):
+      query="SELECT fechaSolicitud, e.Nombre, resultados FROM historialexamenes as h, usuarios as u, examenes as e WHERE h.idPaciente = ('%s') and h.idExamen = e.idExamen and h.idUsuario = u.idUsuario and h.status = 2"%(id)
       cursor= self.ejecutar_query(query,"1")
       data = cursor.fetchall()
       return data
