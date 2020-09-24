@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 23, 2020 at 04:39 PM
+-- Generation Time: Sep 22, 2020 at 05:34 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -97,9 +97,7 @@ CREATE TABLE `examenes` (
 
 INSERT INTO `examenes` (`idExamen`, `Nombre`) VALUES
 (1, 'Resonancia Magnetica'),
-(2, 'Prueba Embarazo'),
-(3, 'Radiografia'),
-(4, 'Electrocardiograma');
+(2, 'Prueba Embarazo');
 
 -- --------------------------------------------------------
 
@@ -135,18 +133,9 @@ CREATE TABLE `historialExamenes` (
   `idUsuario` int(10) NOT NULL,
   `idPaciente` int(10) NOT NULL,
   `idExamen` int(10) NOT NULL,
-  `resultados` varchar(100) DEFAULT NULL,
+  `resultados` varchar(100) NOT NULL,
   `status` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `historialExamenes`
---
-
-INSERT INTO `historialExamenes` (`idHistorialExamen`, `fechaSolicitud`, `comentario`, `idUsuario`, `idPaciente`, `idExamen`, `resultados`, `status`) VALUES
-(1, '2020-09-22', '-', 1, 1, 4, NULL, 0),
-(2, '2020-09-22', 'Urgente', 1, 2, 2, 'Positivo a embarazo', 1),
-(3, '2020-09-22', 'Urgente', 1, 1, 3, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -384,7 +373,7 @@ ALTER TABLE `consultorios`
 -- AUTO_INCREMENT for table `examenes`
 --
 ALTER TABLE `examenes`
-  MODIFY `idExamen` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idExamen` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `habitaciones`
@@ -396,7 +385,7 @@ ALTER TABLE `habitaciones`
 -- AUTO_INCREMENT for table `historialExamenes`
 --
 ALTER TABLE `historialExamenes`
-  MODIFY `idHistorialExamen` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idHistorialExamen` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `internados`

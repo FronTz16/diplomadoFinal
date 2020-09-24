@@ -286,7 +286,7 @@ def solicitar_examen():
 			result = conn.insert_examen(comentario, id_doctor, nombre_paciente, id_examen)
 			if result == True:
 				flash('Se ha registrado el examen correctamente', 'success')
-				return redirect(url_for('solicitar_examen'))
+				return redirect(url_for('ver_historial_examenes'))
 			else:
 				flash('Ocurrio un error vuelva a intentar', 'danger')
 				return redirect(url_for('solicitar_examen'))
