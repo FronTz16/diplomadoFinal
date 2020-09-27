@@ -308,4 +308,4 @@ def autocomplete():
     resultList = []  
     for data_out in pacientes:  
         resultList.append(data_out[0])
-    return jsonify(json_list=resultList) 
+    return jsonify(json_list=resultList)
