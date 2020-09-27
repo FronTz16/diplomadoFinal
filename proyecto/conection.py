@@ -17,7 +17,7 @@ class conexion:
 
     def __init__(self):
       self.ht="localhost"
-      self.db="idoctorv2"
+      self.db="idoctorv4"
       self.usuario="root"
       self.password=""
 
@@ -87,7 +87,8 @@ class conexion:
 
 
     def insert_usuarios(self, nombre, apellidos, password, email, id_tipo):
-      query=('INSERT INTO usuarios (nombreUsuario, apellidoUsuario, emailUsuario, password, id_tipo) '
+
+      query=('INSERT INTO usuarios (nombreUsuario, apellidoUsuario, emailUsuario, password, idTipo) '
               f'VALUES ("{nombre}", "{apellidos}","{email}","{password}","{id_tipo}")')
       print("QUERY--------------------------",query)
       self.ejecutar_query(query,"2")
@@ -162,7 +163,7 @@ class conexion:
       self.ejecutar_query(query,"2")
 
     def select_pacientes(self):
-      query="SELECT idPaciente, nombreCompleto, sexo, floor(datediff (now(), fechaNacimiento)/365) from pacientes WHERE 1"
+      query="SELECT idPaciente, nombreCompleto, Sexo, floor(datediff (now(), fechaNacimiento)/365) from pacientes WHERE 1"
       cursor= self.ejecutar_query(query,"1")
       data = cursor.fetchall()
       return data
@@ -203,7 +204,7 @@ class conexion:
       return data
     
     def select_examenes(self):
-      query= "SELECT * from examen"
+      query= "SELECT * from examenes"
       cursor= self.ejecutar_query(query,"1")
       data = cursor.fetchall()
       return data
@@ -311,3 +312,22 @@ class conexion:
         return examenes
       except:
         return False
+
+    def interna_paciente(self,id):
+      query="Update pacientes set idTipoPaciente = 2 where idPaciente = %s"%(id)
+      print(query)
+      cursor= self.ejecutar_query(query,"2")
+      data = cursor.fetchall()
+      return data
+
+    def select_pacientes_transitorios(self):
+      query="SELECT idPaciente, nombreCompleto, Sexo, floor(datediff (now(), fechaNacimiento)/365) from pacientes WHERE idTipoPaciente = 1"
+      cursor= self.ejecutar_query(query,"1")
+      data = cursor.fetchall()
+      return data
+
+    def select_pacientes_internados(self):
+      query="SELECT idPaciente, nombreCompleto, Sexo, floor(datediff (now(), fechaNacimiento)/365) from pacientes WHERE idTipoPaciente = 2"
+      cursor= self.ejecutar_query(query,"1")
+      data = cursor.fetchall()
+      return data

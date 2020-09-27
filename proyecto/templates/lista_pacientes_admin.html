@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_admin.html" %}
 {% block content %}
 
 {% for data in form %}
@@ -20,10 +20,18 @@
             <div class="tt2">
                 <p>{{data.2}}</p>
             </div>
+            <div class="tt">
+                <a href="{{url_for('historial_paciente', id=data.0)}}" class="btn btn-danger btn-lg">Historial</a>
+                <!-- <button class=" btn btn-danger btn-lg" href="{{url_for('nuevoPaciente')}}">Historial</button> -->
+            </div>
+            <div class="tt">
+                <a href="{{url_for('internar_paciente', id=data.0)}}" class="btn btn-danger btn-lg">Internar </a>
+                <!-- <button class=" btn btn-danger btn-lg" href="{{url_for('nuevoPaciente')}}">Historial</button> -->
+            </div>
 
         </div>
         <div></div>
-        
+
     </div>
     {% endfor %}
 
@@ -36,4 +44,4 @@
         </div>
     </div>
 
-{% endblock content %}
+{% endblock %}

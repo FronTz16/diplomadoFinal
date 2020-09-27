@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for,flash, redirect, request
 from flask_wtf import form
 from proyecto.forms import registration_form, login_form, model_form, editar_pedido_form, tela_form,nota_form, nuevo_paciente_form, solicitar_examen_form
-from proyecto.forms import nuevo_doctor_form
+from proyecto.forms import nuevo_doctor_form, crear_consulta_form
 from proyecto.conection import conexion, user
 from proyecto import app, bcrypt
 from proyecto.users import user
@@ -163,19 +163,25 @@ def graficas():
 # ========================================== Inicio Parte Medica ======================================================
 @app.route('/login',methods=['GET','POST'])
 def login():
-    form=login_form()
-    if form.validate_on_submit():
-        conn=conexion()
-        where="emailUsuario='"+form.email.data+"'"
-		#Se crea el objeto usuario y se almacena en la variable usuario
-        usuario=conn.select("*","usuarios",where,"1")
-		#Se comprueba que las contraseñas coincidan
-        if bcrypt.check_password_hash(usuario.contraseña,form.password.data):
-            login_user(usuario)
-            return redirect(url_for('base'))
-        else:
-            flash('Email o contraseña Incorrectos, Verifica', 'danger')
-    return render_template('index.html', form=form,title="Login")
+	form=login_form()
+	base = ''
+	if form.validate_on_submit():
+		conn = conexion()
+		where = "emailUsuario='" + form.email.data + "'"
+		# Se crea el objeto usuario y se almacena en la variable usuario
+		usuario = conn.select("*", "usuarios", where, "1")
+		# Se comprueba que las contraseñas coincidan
+		if bcrypt.check_password_hash(usuario.contraseña, form.password.data):
+			login_user(usuario)
+			if current_user.id_tipo == 4:
+				base = 'base_admin'
+			else:
+				base = 'base'
+		return render_template(base+'.html')
+		flash('Email o contraseña Incorrectos, Verifica', 'danger')
+	return render_template('index.html', form=form, title="Login")
+
+
 
 #LISTO
 @app.route('/registro',methods=['GET','POST'])
@@ -232,10 +238,11 @@ def nuevoPaciente():
 		contacto=form.contacto.data
 		contacto_referencia=form.contacto_referencia.data
 		transitorio=form.transitorio.data
+		direccion=form.direccion.data
 		conn=conexion()
-		conn.insert_paciente(nombre, fecha_nacimiento, sexo, lugar_nacimiento, curp, tipo_sangre, pre_enfermedades, alergias, contacto, contacto_referencia, transitorio)
+		conn.insert_paciente(nombre, fecha_nacimiento, sexo, lugar_nacimiento, curp, tipo_sangre, pre_enfermedades, alergias, contacto, contacto_referencia, transitorio, direccion)
 		flash('Se agrego el paciente correctamente', 'success')
-		return redirect(url_for('base'))
+		return redirect(url_for('misPacientes'))
 
 
 	return render_template('nuevo_paciente.html', form=form ,title="Nuevo Paciente")
@@ -244,11 +251,28 @@ def nuevoPaciente():
 @app.route('/mis_pacientes')
 #@login_required
 def misPacientes():
+	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
+		conn=conexion()
+		form=conn.select_pacientes()
+		return render_template('lista_pacientes.html', form=form, title="Mis Pacientes")
+	elif current_user.id_tipo == 4:
+		conn = conexion()
+		form = conn.select_pacientes_transitorios()
+		return render_template('lista_pacientes.html', form=form, title="Mis Pacientes")
+
+
+# historial paciente-----------------------------------------------------
+@app.route('/historial_paciente/id/<id>')
+#@login_required
+def historial_paciente(id):
 
 	conn=conexion()
-	form=conn.select_pacientes()
-	return render_template('lista_pacientes.html', form=form, title="Mis Pacientes")
-#fin del ejemplo ------------------------
+	info = conn.select_pacientes_info(id)
+	inter = conn.select_pacientes_internado(id)
+	consu = conn.select_pacientes_consulta(id)
+	exa = conn.select_pacientes_examen(id)
+
+	return render_template('historial_paciente.html', info = info , inter = inter, consu = consu, exa = exa, title="historial")
 
 
 # nuevo doctor ------------------
@@ -268,7 +292,7 @@ def nuevoDoctor():
 
 	return render_template('nuevo_doctor.html', form=form, title="Nuevo Doctor")
 
-#========= Realizar Examen =========
+#================================= EXAMENES STUFF ================================
 @app.route('/nuevo_examen', methods=['GET','POST'])
 @login_required
 def solicitar_examen():
@@ -286,12 +310,12 @@ def solicitar_examen():
 			result = conn.insert_examen(comentario, id_doctor, nombre_paciente, id_examen)
 			if result == True:
 				flash('Se ha registrado el examen correctamente', 'success')
-				return redirect(url_for('base'))
+				return redirect(url_for('solicitar_examen'))
 			else:
 				flash('Ocurrio un error vuelva a intentar', 'danger')
-				return redirect(url_for('base'))
+				return redirect(url_for('solicitar_examen'))
 
-		return render_template('realizar_examen.html', exams=examenes, form=form, title="Nuevo Examen")
+		return render_template('nuevo_examen.html', exams=examenes, form=form, title="Nuevo Examen")
 	else:
 		flash('No tienes acceso a la url ingresada', 'danger')
 		return redirect(url_for('base'))
@@ -343,7 +367,7 @@ def examenes_pendientes():
 	if current_user.id_tipo == 1: #cambiar el valor a 3 al terminar
 		conn = conexion()
 		examenes_pend = conn.get_examenes_pendientes()
-		print("EXAMENES:",examenes_pend)
+
 		return render_template('examenes_pendientes.html', examenes=examenes_pend, title="Examenes Pendientes")
 	else:
 		flash('No tienes acceso a la url ingresada', 'danger')
@@ -375,3 +399,51 @@ def nuevaConsulta(id):
 	else:
 		flash('No tienes acceso a la url ingresada', 'danger')
 		return redirect(url_for('base'))
+@app.route('/historial_examenes/id/<id>')
+@login_required
+def internar_paciente(id):
+
+	if current_user.id_tipo == 4 :
+		conn = conexion()
+
+		exa = conn.interna_paciente(id)
+
+		return render_template('base.html', form=form, title="Nuevo Examen")
+	else:
+		flash('No puedes internar pacientes con este usuario', 'danger')
+		return redirect(url_for('base'))
+
+@app.route('/base_admin')
+@login_required
+def admin():
+
+	if current_user.id_tipo == 4 :
+		conn = conexion()
+
+		exa = conn.interna_paciente(id)
+
+		return render_template('base_admin.html', form=form)
+	else:
+		flash('No puedes acceder sin ser administrador', 'danger')
+		return render_template('index.html', form=form, title="Login")
+@app.route('/mis_pacientes_admin')
+def misPacientesAdmin():
+	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
+		conn=conexion()
+		form=conn.select_pacientes()
+		return render_template('lista_pacientes.html', form=form, title="Mis Pacientes")
+	elif current_user.id_tipo == 4:
+		conn = conexion()
+		form = conn.select_pacientes_transitorios()
+		return render_template('lista_pacientes_admin.html', form=form, title="Mis Pacientes")
+
+@app.route('/mis_pacientes_inter_admin')
+def misPacientesInterAdmin():
+	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
+		conn=conexion()
+		form=conn.select_pacientes()
+		return render_template('lista_pacientes.html', form=form, title="Mis Pacientes")
+	elif current_user.id_tipo == 4:
+		conn = conexion()
+		form = conn.select_pacientes_internados()
+		return render_template('lista_pacientes_admin.html', form=form, title="Mis Pacientes")
