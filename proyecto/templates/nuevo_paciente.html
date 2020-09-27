@@ -181,6 +181,17 @@
                     </div>
                     <div class="col">
                         <div class="form-group">
+                            {{form.direccion.label()}}
+                            {% if form.direccion.errors %}
+                                        {{form.direccion(class="form-control is-invalid", placeholder="Dirección")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.direccion.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.direccion(class="form-control", placeholder="Dirección")}}
+                                    {% endif %} 
                         </div>
                     </div>
                 </div>

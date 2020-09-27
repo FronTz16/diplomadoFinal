@@ -128,6 +128,9 @@ class nuevo_paciente_form(FlaskForm):
 										
 	pre_enfermedades = StringField('Preexistenias',
 	                                validators=[DataRequired(),Length(min=1, max=50)])
+							
+	direccion = StringField('Dirección',
+							validators=[DataRequired(),Length(min=1, max=120)])
 	
 	alergias = StringField('Alergias',
 							validators=[DataRequired(),Length(min=1, max=20)])
@@ -140,8 +143,8 @@ class nuevo_paciente_form(FlaskForm):
 
 	transitorio = SelectField('Status',
 		                                choices=[
-										            ('si','si'),
-													('nel','nel')])					
+										            ('1','Transitorio'),
+													('2','Internado')])
     
 	submit= SubmitField('GUARDAR PACIENTE')
 
@@ -166,3 +169,13 @@ class solicitar_examen_form(FlaskForm):
     comentarios_doctor = TextAreaField('Comentarios')
     
     submit = SubmitField('Solicitar Examen')
+
+
+class crear_consulta_form(FlaskForm):
+
+	id_consultorio = SelectField('Consultorio',
+		                                choices=[
+										            ('1','Consultorio mario')])
+	fecha = DateField('Fecha')
+	hora = StringField('Hora')
+	submit = SubmitField('Crear consulta')

@@ -1,7 +1,54 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
-	<div class="cards">
-        <!-- aqui va el pack -->
+<div class="cards">
+    <div class="card-body">
+        <form action="#" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        {{form.fecha.label()}} {% if form.fecha.errors %} {{form.id_paciente(class="form-control is-invalid", placeholder="Fecha")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.nombre.errors %}
+                            <span>{{error}}</span> {% endfor %}
+                        </div>
+                        {% else %} {{form.fecha(class="form-control", placeholder="YYYY-MM-DD", type="date")}} {% endif %}
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        {{form.hora.label()}} {% if form.hora.errors %} {{form.hora(class="form-control is-invalid", placeholder="Hora")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.hora.errors %}
+                            <span>{{error}}</span> {% endfor %}
+                        </div>
+                        {% else %} {{form.hora(class="form-control", placeholder="Ex: 20:19:00", type="time")}} {% endif %}
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group">
+                        {{form.id_consultorio.label()}} {% if form.id_consultorio.errors %} {{form.id_consultorio(class="form-control is-invalid", placeholder="Id consultorio")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.id_consultorio.errors %}
+                            <span>{{error}}</span> {% endfor %}
+                        </div>
+                        {% else %} {{form.id_consultorio(class="form-control", placeholder="Id consultorio")}} {% endif %}
+                    </div>
+                </div>
+            </div>
+
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col"></div>
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.submit(class="btn bg-danger btn-lg btn-block")}}
+                        </div>
+                    </div>
+                </div>
+        </form>
     </div>
+</div>
 {% endblock content %}
