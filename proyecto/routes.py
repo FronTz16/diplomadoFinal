@@ -284,7 +284,6 @@ def solicitar_examen():
 			id_examen = int(request.form['id_examen'])
 			nombre_paciente = form.nombre_paciente.data
 			result = conn.insert_examen(comentario, id_doctor, nombre_paciente, id_examen)
-			print("Bandera")
 			if result == True:
 				flash('Se ha registrado el examen correctamente', 'success')
 				return redirect(url_for('base'))
