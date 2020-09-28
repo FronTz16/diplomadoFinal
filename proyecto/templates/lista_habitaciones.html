@@ -1,0 +1,32 @@
+{% extends "base_admin.html" %}
+{% block content %}
+
+{% for data in form %}
+	<div class="bloques">
+        <div class="puntos">
+            <!-- <img src="../static/img/1.jpg" alt="" class="img"> -->
+            <p>:</p>
+        </div>
+        <div class="perfil">
+            <img src="../static/img/consultorio.jpg" alt="" class="img2">
+        </div>
+        <div class="info">
+            <div class="tt1">
+                <p>Num. Habitación: {{ data.0 }}</p>
+            </div>
+            <div class="tt">
+                <p>Disponibilidad: {{data.1}}</p>
+            </div>
+            <div class="tt">
+                <p>Id. Doctor: {{data.1}}</p>
+            </div>
+             <a href="{{url_for('asignar_habitacion', id=data.0)}}" class="btn btn-danger btn-lg">Modificar info </a>
+
+        </div>
+        <div></div>
+        
+    </div>
+    {% endfor %}
+
+
+{% endblock content %}

@@ -1,0 +1,41 @@
+{% extends "base_admin.html" %}
+{% block content %}
+
+	<div class="cards">
+        <!-- aqui va el pack -->
+        <div class="card-body">
+            <form action="#" method="POST">
+                    <div class="col">
+                        <div class="form-group">
+                            {% if form.doctor.errors %}
+                                        {{form.doctor(class="form-control is-invalid", placeholder="Id del doctor")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.doctor.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.doctor(class="form-control", placeholder="doctor")}}
+                                    {% endif %}
+                        </div>
+                        <div class="col">
+                    </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            {{form.submit(class="btn bg-danger btn-lg btn-block")}}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

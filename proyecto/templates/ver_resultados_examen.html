@@ -1,21 +1,103 @@
 {% extends "base.html" %} {% block content %}
-
-
-    <div class="card text-center" style="margin-left:15rem;margin-top:5rem; width: 50rem;">
-        <div class="card-header">
-            Resultados Examen No. {{examen.0.0}}
-        </div>
+<link rel="stylesheet" href="/static/template/new.css">
+    <div class="cards">
         <div class="card-body">
-            <h5 class="card-title">{{examen.0.4}}</h5>
-            <p class="card-text">Solicitado por el Dr {{examen.0.2}} {{examen.0.3}}</p>
-            <p class="card-text font-weight-bold">{{examen.0.5}}</p>
-            <p class="card-text">Resultados:</p>
-            <p class="card-text">{{examen.0.6}}</p>
-            <a href="{{url_for('ver_historial_examenes')}}" class="btn btn-primary">Regresar</a>
+            {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %} {% endif %} {% endwith %}
+            <p class="gen-title">RESULTADOS</p>
+            {% if examen.0.7 == 0 and current_user.id_tipo == 3%}
+            <form action="{{url_for('ver_examen',id=examen.0.0)}}" method="POST">
+                <div class="row">
+                    <div class="col-11">
+                        <textarea name="resultado_txt" class="form-control" id="" cols="30" rows="2" style="resize: none;" placeholder="Agregar resultados"></textarea>
+                    </div>
+                    <div class="col-1" style="padding-left: 0%;" onclick="this.closest('form').submit();return false;">
+                        <a href="" type="submit" class="btn btn-send">
+                            <svg width="2em" style="margin-top: 6px;" height="2em" viewBox="0 0 16 16" class="bi bi-cursor-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M14.082 2.182a.5.5 0 0 1 .103.557L8.528 15.467a.5.5 0 0 1-.917-.007L5.57 10.694.803 8.652a.5.5 0 0 1-.006-.916l12.728-5.657a.5.5 0 0 1 .556.103z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </form>
+            <div class="row row-comentario">
+                <div class="col">
+                    <p class="title-examen" style="margin-top: 1%;">COMENTARIO DEL DR. {{examen.0.2}} {{examen.0.3}}</p>
+                    <p class="result-examen">EXAMEN | {{examen.0.5}} | {{examen.0.13}}</p>
+                </div>
+            </div>
+            {%elif examen.0.7 == 1 %}
+                <div class="row row-comentario">
+                    <div class="col">
+                        <p class="result-examen" style="margin-top: 1.2%;">RESULTADOS | {{examen.0.6}}</p>
+                    </div>
+                </div>
+                <div class="row row-comentario">
+                    <div class="col">
+                        <p class="title-examen" style="margin-top: 1%;">COMENTARIO DEL DR. {{examen.0.2}} {{examen.0.3}}</p>
+                        <p class="result-examen">EXAMEN | {{examen.0.5}} | {{examen.0.13}}</p>
+                    </div>
+                </div>
+            {%else%}
+
+            <div class="row row-comentario">
+                <div class="col">
+                    <p class="title-examen" style="margin-top: 1%;">COMENTARIO DEL DR. {{examen.0.2}} {{examen.0.3}}</p>
+                    <p class="result-examen">EXAMEN | {{examen.0.5}} | {{examen.0.13}}</p>
+                </div>
+            </div>
+            <p class="result-examen">Examen pendiente</p>
+            {%endif%}
+
         </div>
-        <div class="card-footer text-muted">
-            Solicitado el {{examen.0.1}} (Año-Mes-Dia)
+        <div class="card-footer">
+            <p class="result-examen" style="margin-top: 2%;">Solicitado el {{examen.0.1}} (Año-Mes-Dia)</p>
         </div>
     </div>
+    <div class="cards">
+        <p class="gen-title">DATOS GENERALES DEL PACIENTE</p>
+        <div class="row">
+            <div class="col-2" >
+                    <img src="/static/img/generic_user.png" class="gen-user" alt="">
+            </div>
+            <div class="col-4" >
+                <p class="title-examen">NOMBRE</p>
+                <p class="result-examen">{{examen.0.4}}</p>
+                <p class="title-examen">EDAD</p>
+                <p class="result-examen">{{examen.1}}</p>
+            </div>
+            <div class="col-3" >
+                <p class="title-examen">TELEFONO</p>
+                <p class="result-examen">{{examen.0.9}}</p>
+                <p class="title-examen">DOMICILIO</p>
+                <p class="result-examen">{{examen.0.10}}</p>
+            </div>
+            <div class="col-3">
+                <p class="title-examen">TIPO DE SANGRE</p>
+                <p class="result-examen">{{examen.0.11}}</p>
+                <p class="title-examen">ALERGIAS</p>
+                <p class="result-examen">{{examen.0.12}}</p>
+            </div>
+        </div>
+    </div>
+<!--
+    examenes 0 - idHistorialExamen
+    examenes 1 - fechaSolicitud
+    examenes 2 - nombreDoctor
+    examenes 3 - apellidoDoctor
+    examenes 4 - nombreCompletoPaciente
+    examenes 5 - examenNobre
+    examenes 6 - resultados
+    examenes 7 - status
+    examenes 8 - fechaNacimiento
+    examenes 9 - tel
+    examenes 10 - direccion
+    examenes 11 - TipoSangre
+    examenes 12 - alergias
+    examenes 13 - comentarios del doctor
 
+ -->
 {% endblock content %}

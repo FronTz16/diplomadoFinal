@@ -162,13 +162,14 @@ class nuevo_doctor_form(FlaskForm):
 
 	submit = SubmitField('GUARDAR DOCTOR')
 
+
 class solicitar_examen_form(FlaskForm):
-    nombre_paciente = StringField('Nombre Paciente',
-									validators=[DataRequired(), Length(min=10, max=50)],id="nombre_paciente")
-    
-    comentarios_doctor = TextAreaField('Comentarios')
-    
-    submit = SubmitField('Solicitar Examen')
+	nombre_paciente = StringField('Nombre Paciente',
+								  validators=[DataRequired(), Length(min=10, max=50)], id="nombre_paciente")
+
+	comentarios_doctor = TextAreaField('Comentarios')
+
+	submit = SubmitField('Solicitar Examen')
 
 
 class crear_consulta_form(FlaskForm):
@@ -179,3 +180,13 @@ class crear_consulta_form(FlaskForm):
 	fecha = DateField('Fecha')
 	hora = StringField('Hora')
 	submit = SubmitField('Crear consulta')
+
+
+class resolver_examen_form(FlaskForm):
+	resolucion = StringField('Resultados')
+	submit = SubmitField()
+
+class asignar_habitaciones(FlaskForm):
+
+	doctor = StringField('Id doctor')
+	submit = SubmitField()

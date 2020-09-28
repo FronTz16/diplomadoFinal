@@ -37,7 +37,7 @@
                     <td></td>
                     <td>
                         {% if exam.6 == 0%}
-                        <button class="btn btn-block" style="background-color:#f2b062 !important;">Pendiente</button>
+                            <button class="btn btn-block" style="background-color:#f2b062 !important;" onclick="window.location.href='{{url_for('ver_examen',id=exam.0)}}';">Pendiente</button>
                         {%else%}
                             <button class="btn btn-block" style="background-color:#45ba8c !important;"  onclick="window.location.href='{{url_for('ver_examen',id=exam.0)}}';">Entregado</button>
                         {%endif%}
@@ -56,4 +56,4 @@
         $('#example').DataTable();
     });
 </script>
-{% endblock content %}
+{% endblock content %}ontent %}

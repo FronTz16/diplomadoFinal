@@ -1,12 +1,13 @@
 from flask import Flask, render_template, url_for,flash, redirect, request
 from flask_wtf import form
 from proyecto.forms import registration_form, login_form, model_form, editar_pedido_form, tela_form,nota_form, nuevo_paciente_form, solicitar_examen_form
-from proyecto.forms import nuevo_doctor_form, crear_consulta_form
+from proyecto.forms import nuevo_doctor_form, crear_consulta_form, resolver_examen_form, asignar_habitaciones
 from proyecto.conection import conexion, user
 from proyecto import app, bcrypt
 from proyecto.users import user
 from flask_login import login_user, current_user, logout_user, login_required
 from flask import jsonify
+from datetime import date
 
 @app.route('/dashboard',methods=['GET','POST'])
 @login_required
@@ -207,8 +208,10 @@ def registro():
 @app.route('/base')
 #@login_required
 def base():
-
-	return render_template('base.html', title="Base")
+	if current_user.id_tipo == 4:
+		return render_template('base_admin.html', title="Base")
+	else:
+		return render_template('base.html', title="Base")
 # fin de la base --------
 
 # ejemplo ------------------
@@ -242,14 +245,14 @@ def nuevoPaciente():
 		conn=conexion()
 		conn.insert_paciente(nombre, fecha_nacimiento, sexo, lugar_nacimiento, curp, tipo_sangre, pre_enfermedades, alergias, contacto, contacto_referencia, transitorio, direccion)
 		flash('Se agrego el paciente correctamente', 'success')
-		return redirect(url_for('misPacientes'))
+		return redirect(url_for('base'))
 
 
 	return render_template('nuevo_paciente.html', form=form ,title="Nuevo Paciente")
 #fin del ejemplo ------------------------
 
 @app.route('/mis_pacientes')
-#@login_required
+@login_required
 def misPacientes():
 	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
 		conn=conexion()
@@ -293,16 +296,16 @@ def nuevoDoctor():
 	return render_template('nuevo_doctor.html', form=form, title="Nuevo Doctor")
 
 #================================= EXAMENES STUFF ================================
-@app.route('/nuevo_examen', methods=['GET','POST'])
+@app.route('/nuevo_examen', methods=['GET', 'POST'])
 @login_required
 def solicitar_examen():
-	if current_user.id_tipo == 1:
+	if current_user.id_tipo == 1 or current_user.id_tipo == 3:  # eliminar 3 al terminar
 		conn = conexion()
 		examenes = conn.select_examenes()
 		form = solicitar_examen_form()
 
 		if form.is_submitted():
-			
+
 			comentario = form.comentarios_doctor.data
 			id_doctor = current_user.id
 			id_examen = int(request.form['id_examen'])
@@ -310,7 +313,7 @@ def solicitar_examen():
 			result = conn.insert_examen(comentario, id_doctor, nombre_paciente, id_examen)
 			if result == True:
 				flash('Se ha registrado el examen correctamente', 'success')
-				return redirect(url_for('solicitar_examen'))
+				return redirect(url_for('ver_historial_examenes'))
 			else:
 				flash('Ocurrio un error vuelva a intentar', 'danger')
 				return redirect(url_for('solicitar_examen'))
@@ -319,6 +322,7 @@ def solicitar_examen():
 	else:
 		flash('No tienes acceso a la url ingresada', 'danger')
 		return redirect(url_for('base'))
+
 
 # @app.route('/registar_nuevo_examen', methods=['GET', 'POST'])
 # @login_required
@@ -334,11 +338,10 @@ def autocomplete_paciente_nombre():
         resultList.append(data_out[0])
     return jsonify(json_list=resultList)
 
-@app.route('/historial_examenes',methods=['GET','POST'])
+@app.route('/historial_examenes', methods=['GET', 'POST'])
 @login_required
 def ver_historial_examenes():
-
-	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
+	if current_user.id_tipo != 4:
 		conn = conexion()
 		historial = conn.get_historial_examenes()
 
@@ -347,18 +350,35 @@ def ver_historial_examenes():
 		flash('No tienes acceso a la url ingresada', 'danger')
 		return redirect(url_for('base'))
 
-@app.route("/ver_examen/id/<id>")
+
+@app.route("/ver_examen/id/<id>", methods=['GET', 'POST'])
 @login_required
 def ver_examen(id):
+	try:
+		conn = conexion()
+		form = resolver_examen_form()
+		if current_user.id_tipo != 4:
+			if form.is_submitted():
+				resultado = str(request.form['resultado_txt'])
+				conn.insert_resultado(id, resultado)
+				flash('Se han registrado correctamente los resultados', 'success')
+				return redirect(url_for('ver_examen', id=id))
+			else:
+				examen = conn.select_examen(id)
+				title_p = 'Examenes Medicos / Folio ' + str(examen[0][0])
+				age = calculateAge(examen[0][8])
+				examen_L = list(examen)
+				examen_L.append(age)
+				examen = tuple(examen_L)
 
-	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
-		conn=conexion()
-		examen = conn.select_examen(id)
-	else:
-		flash('No tienes acceso a la url ingresada', 'danger')
+		else:
+			flash('No tienes acceso a la url ingresada', 'danger')
+			return redirect(url_for('base'))
+	except:
+		flash('Ocurrio un error.Intentalo mas tarde', 'danger')
 		return redirect(url_for('base'))
 
-	return render_template('ver_resultados_examen.html', examen = examen, title='Resultados')
+	return render_template('ver_resultados_examen.html', examen=examen, title=title_p)
 
 @app.route('/examenes_pendientes',methods=['GET','POST'])
 @login_required
@@ -399,19 +419,6 @@ def nuevaConsulta(id):
 	else:
 		flash('No tienes acceso a la url ingresada', 'danger')
 		return redirect(url_for('base'))
-@app.route('/historial_examenes/id/<id>')
-@login_required
-def internar_paciente(id):
-
-	if current_user.id_tipo == 4 :
-		conn = conexion()
-
-		exa = conn.interna_paciente(id)
-
-		return render_template('base.html', form=form, title="Nuevo Examen")
-	else:
-		flash('No puedes internar pacientes con este usuario', 'danger')
-		return redirect(url_for('base'))
 
 @app.route('/base_admin')
 @login_required
@@ -446,4 +453,68 @@ def misPacientesInterAdmin():
 	elif current_user.id_tipo == 4:
 		conn = conexion()
 		form = conn.select_pacientes_internados()
-		return render_template('lista_pacientes_admin.html', form=form, title="Mis Pacientes")
+		return render_template('lista_pacientes_inter_admin.html', form=form, title="Mis Pacientes")
+
+def calculateAge(birthDate):
+    today = date.today()
+    age = today.year - birthDate.year - ((today.month, today.day) < (birthDate.month, birthDate.day))
+    return age
+
+@app.route('/movimiento_paciente/id/<id>')
+@login_required
+def alta_paciente(id):
+
+	if current_user.id_tipo == 4 :
+		conn = conexion()
+
+		exa = conn.alta_paciente(id)
+		if exa == True:
+
+			return redirect(url_for('misPacientesInterAdmin', id=id))
+	else:
+		flash('No puedes internar pacientes con este usuario', 'danger')
+		return redirect(url_for('base'))
+
+@app.route('/internar_paciente/id/<id>')
+@login_required
+def internar_paciente(id):
+
+	if current_user.id_tipo == 4:
+		conn = conexion()
+
+		exa = conn.interna_paciente(id)
+		if exa == True:
+			return redirect(url_for('misPacientesAdmin', id=id))
+	else:
+		flash('No puedes internar pacientes con este usuario', 'danger')
+		return redirect(url_for('base'))
+
+
+@app.route('/lista_habitaciones')
+@login_required
+#@login_required
+def habitaciones():
+	if current_user.id_tipo == 4:
+		conn=conexion()
+		form=conn.select_habitacion()
+		return render_template('lista_habitaciones.html', form=form, title="Habitaciones")
+	else:
+		flash('No puedes acceder a esta url', 'danger')
+		return redirect(url_for('base'))
+
+@app.route('/asignar_habitacion/id/<id>', methods=['GET', 'POST'])
+@login_required
+def asignar_habitacion(id):
+	if current_user.id_tipo == 4:
+		conn=conexion()
+		form=asignar_habitaciones()
+		doctor = form.doctor.data
+		print(doctor)
+		if form.is_submitted():
+			conn.asignar_doctor(id, doctor)
+		return render_template('asignar_habitacion.html',form=form, id=id)
+	else:
+		flash('No puedes acceder a esta url', 'danger')
+		return redirect(url_for('base'))
+
+

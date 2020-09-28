@@ -202,41 +202,39 @@ class conexion:
       cursor= self.ejecutar_query(query,"1")
       data = cursor.fetchall()
       return data
-    
-    def select_examenes(self):
-      query= "SELECT * from examenes"
-      cursor= self.ejecutar_query(query,"1")
-      data = cursor.fetchall()
-      return data
 
-    def insert_examen(self,comentario,id_doctor,nombre_paciente,id_examen):
-      
-      try:
-        id_paciente = self.get_id_paciente(nombre_paciente)
-        
-        if id_paciente:
-          today = date.today()
-          d1 = today.strftime("%Y-%m-%d")
-          query=('INSERT INTO historialExamenes (fechaSolicitud, comentario, idUsuario, idPaciente, idExamen,status)'
-              f'VALUES ("{d1}", "{comentario}","{id_doctor}","{id_paciente}","{id_examen}","0")')
-          print("QUERY",query)
-          self.ejecutar_query(query,"2")
-          return True
-        else:
-          return False
-      except:
-        return False
-      
-    
-    def get_id_paciente(self,nombre):
-      try:
-        query= f'Select idPaciente FROM pacientes WHERE nombreCompleto = "{nombre}"'
-        cursor= self.ejecutar_query(query,"1")
-        resultado = cursor.fetchone()
-        id_usuario= str(resultado[0])
-        return id_usuario
-      except:
-        return False
+    def select_examenes(self):
+        query = "SELECT * from examenes"
+        cursor = self.ejecutar_query(query, "1")
+        data = cursor.fetchall()
+        return data
+
+    def insert_examen(self, comentario, id_doctor, nombre_paciente, id_examen):
+
+        try:
+            id_paciente = self.get_id_paciente(nombre_paciente)
+            if id_paciente:
+                today = date.today()
+                d1 = today.strftime("%Y-%m-%d")
+                query = (
+                    'INSERT INTO historialExamenes (fechaSolicitud, comentario, idUsuario, idPaciente, idExamen,status)'
+                    f'VALUES ("{d1}", "{comentario}","{id_doctor}","{id_paciente}","{id_examen}","0")')
+                self.ejecutar_query(query, "2")
+                return True
+            else:
+                return False
+        except:
+            return False
+
+    def get_id_paciente(self, nombre):
+        try:
+            query = f'Select idPaciente FROM pacientes WHERE nombreCompleto = "{nombre}"'
+            cursor = self.ejecutar_query(query, "1")
+            resultado = cursor.fetchone()
+            id_usuario = str(resultado[0])
+            return id_usuario
+        except:
+            return False
 
 
 
@@ -247,6 +245,28 @@ class conexion:
 
       self.ejecutar_query(query,"2")
 
+    def get_historial_examenes(self):
+        try:
+            query = (
+                'Select h.idHistorialExamen, h.fechaSolicitud, u.nombreUsuario, u.apellidoUsuario, p.nombreCompleto, '
+                ' e.nombre, h.status FROM historialExamenes as h INNER JOIN usuarios as u INNER JOIN pacientes as p '
+                ' INNER JOIN examenes as e WHERE h.idUsuario=u.idUsuario AND h.idPaciente = p.idPaciente '
+                ' AND h.idExamen= e.idExamen')
+            cursor = self.ejecutar_query(query, "1")
+            examenes = cursor.fetchall()
+            return examenes
+        except:
+            return False
+
+    def select_examen(self, id):
+        query = ("Select h.idHistorialExamen, h.fechaSolicitud, u.nombreUsuario, u.apellidoUsuario, p.nombreCompleto,"
+                 "e.nombre, h.resultados, h.status,p.fechaNacimiento, p.contactoReferencias,p.direccionPaciente, p.grupoSanguineo, p.alergias, h.comentario"
+                 " FROM historialExamenes as h INNER JOIN usuarios as u INNER JOIN pacientes as p "
+                 f"INNER JOIN examenes as e WHERE h.idHistorialExamen = {id} AND h.idUsuario=u.idUsuario AND "
+                 "h.idPaciente = p.idPaciente AND h.idExamen= e.idExamen")
+        cursor = self.ejecutar_query(query, "1")
+        data = cursor.fetchall()
+        return data
 
     def get_historial_examenes(self):
       try:
@@ -260,65 +280,22 @@ class conexion:
       except:
         return False
 
-    def select_examen(self,id):
-      query= ("Select h.idHistorialExamen, h.fechaSolicitud, u.nombreUsuario, u.apellidoUsuario, p.nombreCompleto," 
-              "e.nombre, h.resultados FROM historialExamenes as h INNER JOIN usuarios as u INNER JOIN pacientes as p "
-              f"INNER JOIN examenes as e WHERE h.idHistorialExamen = {id} AND h.idUsuario=u.idUsuario AND "
-              "h.idPaciente = p.idPaciente AND h.idExamen= e.idExamen")
-      cursor= self.ejecutar_query(query,"1")
-      data = cursor.fetchall()
-      return data
-
     def get_examenes_pendientes(self):
-      try:
-        query= ('Select h.idHistorialExamen, h.fechaSolicitud, u.nombreUsuario, u.apellidoUsuario, p.nombreCompleto, '
-                ' e.nombre, h.status FROM historialExamenes as h INNER JOIN usuarios as u INNER JOIN pacientes as p '
-                ' INNER JOIN examenes as e WHERE h.idUsuario=u.idUsuario AND h.idPaciente = p.idPaciente '
-                ' AND h.idExamen= e.idExamen')
-        cursor= self.ejecutar_query(query,"1")
-        examenes = cursor.fetchall()
-        return examenes
-      except:
-        return False
-
-    def get_historial_examenes(self):
-      try:
-        query= ('Select h.idHistorialExamen, h.fechaSolicitud, u.nombreUsuario, u.apellidoUsuario, p.nombreCompleto, '
-                ' e.nombre, h.status FROM historialExamenes as h INNER JOIN usuarios as u INNER JOIN pacientes as p '
-                ' INNER JOIN examenes as e WHERE h.idUsuario=u.idUsuario AND h.idPaciente = p.idPaciente '
-                ' AND h.idExamen= e.idExamen')
-        cursor= self.ejecutar_query(query,"1")
-        examenes = cursor.fetchall()
-        return examenes
-      except:
-        return False
-
-    def select_examen(self,id):
-      query= ("Select h.idHistorialExamen, h.fechaSolicitud, u.nombreUsuario, u.apellidoUsuario, p.nombreCompleto," 
-              "e.nombre, h.resultados FROM historialExamenes as h INNER JOIN usuarios as u INNER JOIN pacientes as p "
-              f"INNER JOIN examenes as e WHERE h.idHistorialExamen = {id} AND h.idUsuario=u.idUsuario AND "
-              "h.idPaciente = p.idPaciente AND h.idExamen= e.idExamen")
-      cursor= self.ejecutar_query(query,"1")
-      data = cursor.fetchall()
-      return data
-
-    def get_examenes_pendientes(self):
-      try:
-        query= ('Select h.idHistorialExamen, h.fechaSolicitud, u.nombreUsuario, u.apellidoUsuario,'
-                  'e.nombre FROM historialExamenes as h INNER JOIN usuarios as u '
-                  'INNER JOIN examenes as e WHERE h.status = 0 AND  h.idUsuario=u.idUsuario AND h.idExamen= e.idExamen')
-        cursor= self.ejecutar_query(query,"1")
-        examenes = cursor.fetchall()
-        return examenes
-      except:
-        return False
+        try:
+            query = ('Select h.idHistorialExamen, h.fechaSolicitud, u.nombreUsuario, u.apellidoUsuario,'
+                     'e.nombre FROM historialExamenes as h INNER JOIN usuarios as u '
+                     'INNER JOIN examenes as e WHERE h.status = 0 AND  h.idUsuario=u.idUsuario AND h.idExamen= e.idExamen')
+            cursor = self.ejecutar_query(query, "1")
+            examenes = cursor.fetchall()
+            return examenes
+        except:
+            return False
 
     def interna_paciente(self,id):
       query="Update pacientes set idTipoPaciente = 2 where idPaciente = %s"%(id)
       print(query)
       cursor= self.ejecutar_query(query,"2")
-      data = cursor.fetchall()
-      return data
+      return cursor
 
     def select_pacientes_transitorios(self):
       query="SELECT idPaciente, nombreCompleto, Sexo, floor(datediff (now(), fechaNacimiento)/365) from pacientes WHERE idTipoPaciente = 1"
@@ -331,3 +308,44 @@ class conexion:
       cursor= self.ejecutar_query(query,"1")
       data = cursor.fetchall()
       return data
+
+    def insert_resultado(self, id, resultado):
+        try:
+            query = (
+                f'UPDATE historialExamenes SET resultados = "{resultado}", status="1"  WHERE idHistorialExamen = "{id}"')
+            print(query)
+            self.ejecutar_query(query, "2")
+            return True
+        except:
+            return False
+
+    def alta_paciente(self,id):
+      query="Update pacientes set idTipoPaciente = 1 where idPaciente = %s"%(id)
+      print(query)
+      cursor= self.ejecutar_query(query,"2")
+      return cursor
+
+
+    def select_habitacion(self):
+      query="SELECT idHabitacion, Disponibilidad, idUsuario from habitaciones where 1"
+      cursor= self.ejecutar_query(query,"1")
+      data = cursor.fetchall()
+      return data
+
+    def select_habitacion_unica(self, id):
+      query="SELECT idHabitacion, Disponibilidad, idUsuario from habitaciones where idHabitacion = "+ id
+      cursor= self.ejecutar_query(query,"1")
+      data = cursor.fetchall()
+      return data
+
+    def asignar_doctor(self, idHabitacion, idDoctor):
+        validation = "SELECT idUsuario from usuarios where idUsuario = %s"%(idDoctor)
+        print(validation)
+        cursor1 = self.ejecutar_query(validation, "1")
+        print(cursor1)
+        query = "Update Habitaciones set idUsuario = "+ idDoctor +" where idHabitacion = %s"%(idHabitacion)
+        #cursor = self.ejecutar_query(query, "2")
+        #data = cursor.fetchall()
+        return validation
+
+
