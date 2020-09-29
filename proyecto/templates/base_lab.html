@@ -31,7 +31,7 @@
 <body>
     <div class="header">
         <div class="left">
-            <p>iDoctor Med</p>
+            <p>iDoctor Labs.</p>
         </div>
         <div class="right">
             <div class="doc">
@@ -50,9 +50,8 @@
             <input type="text" placeholder="Buscar..">
         </div>
         <ul>
-            <i class="fas fa-users"><a href="{{url_for('misPacientes')}}">Mis pacientes</a> </i>
             <i class="fas fa-briefcase"><a href="{{url_for('ver_historial_examenes')}}">Exámenes médicos</a></i>
-            <i class="fas fa-briefcase"><a href="{{url_for('mis_habitaciones')}}">Mis habitaciones</a></i>
+
         </ul>
     </div>
     <div class="cont">
@@ -67,35 +66,7 @@
             {% endfor %} {% endif %} {% endwith %}{% endblock %}
         </div>
     </div>
-    <!-- <footer class="sticky-footer">
-    <div class="container my-auto">
-      <div class="copyright text-center my-auto">
-        <span>Programado con mucho Amor <i class="fas fa-heart"></i> y Alcohol <i class="fas fa-beer"></i> </span>
-      </div>
-    </div>
-  </footer> -->
-    <!-- Bootstrap core JavaScript-->
-    <!-- <script src="/static/js/jquery/jquery.js"></script> -->
 
-
-
-
-    <!-- Core plugin JavaScript-->
-    <!-- <script src="/static/js/jquery/jquery.easing.min.js"></script> -->
-
-    <!-- Custom scripts for all pages-->
-    <!-- <script src="/static/js/sb-admin.js"></script>
-    <script src="https://unpkg.com/jspdf@1.5.3/dist/jspdf.min.js"></script>
-    <script src="https://unpkg.com/jspdf-autotable@3.2.5/dist/jspdf.plugin.autotable.js"></script>
-    <script>
-        function generarPDF() {
-            var doc = new jsPDF();
-            doc.autoTable({
-                html: '#tabla'
-            });
-            doc.save('table.pdf');
-        }
-    </script> -->
 
 </body>
 

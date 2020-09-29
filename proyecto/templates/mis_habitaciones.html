@@ -1,4 +1,4 @@
-{% extends "base_admin.html" %}
+{% extends "base.html" %}
 {% block content %}
 
 {% for data in form %}
@@ -20,8 +20,6 @@
             <div class="tt">
                 <p>Id. Doctor: {{data.2}}</p>
             </div>
-             <a href="{{url_for('asignar_habitacion', id=data.0)}}" class="btn btn-danger btn-lg">Modificar info </a>
-
         </div>
         <div></div>
         

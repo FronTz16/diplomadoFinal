@@ -17,7 +17,7 @@ class conexion:
 
     def __init__(self):
       self.ht="localhost"
-      self.db="idoctorv4"
+      self.db="idoctorv4_1"
       self.usuario="root"
       self.password=""
 
@@ -158,9 +158,12 @@ class conexion:
 #insert de paciente   
 
     def insert_paciente(self, nombre, fecha_nacimiento, sexo, lugar_nacimiento, curp, tipo_sangre, pre_enfermedades, alergias, contacto, contacto_referencia, transitorio, direccion):
-      query=('INSERT INTO pacientes (nombreCompleto, fechaNacimiento, sexo, lugarNacimiento, curp, grupoSanguineo, enfermedadesPree, alergias, contactoPaciente, contactoReferencias, idTipoPaciente, direccionPaciente) '
-              f'VALUES ("{nombre}", "{fecha_nacimiento}","{sexo}","{lugar_nacimiento}","{curp}","{tipo_sangre}","{pre_enfermedades}","{alergias}","{contacto}","{contacto_referencia}","{transitorio}", "{direccion}")')
-      self.ejecutar_query(query,"2")
+        try:
+          query=('INSERT INTO pacientes (nombreCompleto, fechaNacimiento, sexo, lugarNacimiento, curp, grupoSanguineo, enfermedadesPree, alergias, contactoPaciente, contactoReferencias, idTipoPaciente, direccionPaciente) '
+                  f'VALUES ("{nombre}", "{fecha_nacimiento}","{sexo}","{lugar_nacimiento}","{curp}","{tipo_sangre}","{pre_enfermedades}","{alergias}","{contacto}","{contacto_referencia}","{transitorio}", "{direccion}")')
+          self.ejecutar_query(query,"2")
+        except:
+            pass
 
     def select_pacientes(self):
       query="SELECT idPaciente, nombreCompleto, Sexo, floor(datediff (now(), fechaNacimiento)/365) from pacientes WHERE 1"
@@ -339,13 +342,83 @@ class conexion:
       return data
 
     def asignar_doctor(self, idHabitacion, idDoctor):
-        validation = "SELECT idUsuario from usuarios where idUsuario = %s"%(idDoctor)
+        cursor = False
+        cursor2 = []
+        validation = "SELECT nombreUsuario, idTipo from usuarios where idUsuario = %s"%(idDoctor)
         print(validation)
-        cursor1 = self.ejecutar_query(validation, "1")
-        print(cursor1)
-        query = "Update Habitaciones set idUsuario = "+ idDoctor +" where idHabitacion = %s"%(idHabitacion)
-        #cursor = self.ejecutar_query(query, "2")
-        #data = cursor.fetchall()
-        return validation
+        try:
+            cursor1 = self.ejecutar_query(validation, "1")
+            cursor2 = cursor1.fetchall()
+        except:
+            pass
+        #print("Cursor: ")
+       # print(cursor2[0][1])
+
+        if len(cursor2) > 0:
+            if cursor2[0][1] == 1 or cursor2[0][1] == 2:
+                query = "UPDATE `habitaciones` SET `idUsuario`= %s WHERE idHabitacion = %s"%(idDoctor, idHabitacion)
+                print(query)
+                cursor = self.ejecutar_query(query, "2")
+                print("Segunda query")
+                print(cursor)
+            else:
+                pass
+        else:
+            pass
+        return cursor
+
+    def select_habitaciones(self, id):
+        query = "SELECT idHabitacion, Disponibilidad, idUsuario from habitaciones where idUsuario = " + str(id)
+        print(id)
+        cursor = self.ejecutar_query(query, "1")
+        data = cursor.fetchall()
+        return data
+
+    def select_pacientes_id(self, id):
+        query = "SELECT p.idPaciente, p.nombreCompleto, p.Sexo, floor(datediff (now(), p.fechaNacimiento)/365) from pacientes as p, asignacion as a WHERE a.idUsuario = ('%s')and p.idPaciente = a.idPaciente" % (
+            id)
+        cursor = self.ejecutar_query(query, "1")
+        data = cursor.fetchall()
+        return data
+
+    def insert_asignacion(self, id, doctor):
+        cursor = False
+        cursor2=[]
+
+        validation = "SELECT nombreUsuario, idTipo from usuarios where idUsuario = %s" % (doctor)
+        print(validation)
+        try:
+            cursor1 = self.ejecutar_query(validation, "1")
+            cursor2 = cursor1.fetchall()
+        except:
+            pass
+
+        # print("Cursor: ")
+        # print(cursor2[0][1])
+
+        if len(cursor2) > 0:
+            if cursor2[0][1] == 1 or cursor2[0][1] == 2:
+                query = ('INSERT INTO asignacion (idPaciente, idUsuario) '
+                         f'VALUES ("{id}","{doctor}")')
+                print(query)
+                cursor = self.ejecutar_query(query, "2")
+                print("Segunda query")
+                print(cursor)
+            else:
+                pass
+        else:
+            pass
+        return cursor
+
+
+    def get_all_paciente(self, id):
+      query="SELECT nombreCompleto from pacientes WHERE idPaciente = "+ str(id)
+      cursor= self.ejecutar_query(query,"1")
+      data = cursor.fetchall()
+      return data
+
+
+
+
 
 

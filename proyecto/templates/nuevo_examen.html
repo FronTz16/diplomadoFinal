@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base_lab.html" %} {% block content %}
 <div class="cards">
     <!-- aqui va el pack -->
     <div class="card-body">
@@ -14,7 +14,7 @@
                     <div class="form-group">
 
                         {{form.nombre_paciente.label()}} {{form.nombre_paciente(class="form-control", placeholder="Nombre Paciente")}}
-                        <a href="{{url_for('nuevoPaciente')}}" class="badge badge-primary">Registrar Nuevo Paciente</a>
+
                     </div>
                 </div>
             </div>

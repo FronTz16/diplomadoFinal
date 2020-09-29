@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for,flash, redirect, request
 from flask_wtf import form
-from proyecto.forms import registration_form, login_form, model_form, editar_pedido_form, tela_form,nota_form, nuevo_paciente_form, solicitar_examen_form
+from proyecto.forms import registration_form, login_form, model_form, editar_pedido_form, tela_form, nota_form, \
+	nuevo_paciente_form, solicitar_examen_form, asignar_form
 from proyecto.forms import nuevo_doctor_form, crear_consulta_form, resolver_examen_form, asignar_habitaciones
 from proyecto.conection import conexion, user
 from proyecto import app, bcrypt
@@ -164,9 +165,11 @@ def graficas():
 # ========================================== Inicio Parte Medica ======================================================
 @app.route('/login',methods=['GET','POST'])
 def login():
+
 	form=login_form()
 	base = ''
 	if form.validate_on_submit():
+
 		conn = conexion()
 		where = "emailUsuario='" + form.email.data + "'"
 		# Se crea el objeto usuario y se almacena en la variable usuario
@@ -174,11 +177,14 @@ def login():
 		# Se comprueba que las contraseñas coincidan
 		if bcrypt.check_password_hash(usuario.contraseña, form.password.data):
 			login_user(usuario)
+
 			if current_user.id_tipo == 4:
 				base = 'base_admin'
+			elif current_user.id_tipo == 3:
+				base = 'base_lab'
 			else:
 				base = 'base'
-		return render_template(base+'.html')
+		return render_template(base+'.html'  )
 		flash('Email o contraseña Incorrectos, Verifica', 'danger')
 	return render_template('index.html', form=form, title="Login")
 
@@ -201,22 +207,24 @@ def registro():
 		conn=conexion()
 		conn.insert_usuarios(nombres,apellidos,h_password, email, privilegios )
 		flash('Se ha creado correctamente el usuario', 'success')
-		return redirect(url_for('usuarios'))
+		return redirect(url_for('login'))
 
 	return render_template('crear_usuario.html', form=form, title="registro")
 
 @app.route('/base')
-#@login_required
+@login_required
 def base():
 	if current_user.id_tipo == 4:
 		return render_template('base_admin.html', title="Base")
+	elif current_user.id_tipo == 3:
+		return render_template('base_lab.html', title="Base")
 	else:
 		return render_template('base.html', title="Base")
 # fin de la base --------
 
 # ejemplo ------------------
 @app.route('/nuevoExamen')
-#@login_required
+@login_required
 def nuevoExamen():
 
 	return render_template('nuevo_examen.html', title="Graficas")
@@ -227,25 +235,29 @@ def nuevoExamen():
 #@login_required
 def nuevoPaciente():
 	form=nuevo_paciente_form()
-	
-	if form.validate_on_submit():
-		print("AGREGAR")
-		nombre=form.nombre.data
-		fecha_nacimiento=form.fecha_nacimiento.data
-		sexo=form.sexo.data
-		lugar_nacimiento=form.lugar_nacimiento.data
-		curp=form.curp.data
-		tipo_sangre=form.tipo_sangre.data
-		pre_enfermedades=form.pre_enfermedades.data
-		alergias=form.alergias.data
-		contacto=form.contacto.data
-		contacto_referencia=form.contacto_referencia.data
-		transitorio=form.transitorio.data
-		direccion=form.direccion.data
-		conn=conexion()
-		conn.insert_paciente(nombre, fecha_nacimiento, sexo, lugar_nacimiento, curp, tipo_sangre, pre_enfermedades, alergias, contacto, contacto_referencia, transitorio, direccion)
-		flash('Se agrego el paciente correctamente', 'success')
+	if current_user.id_tipo == 4:
+		if form.validate_on_submit():
+			print("AGREGAR")
+			nombre=form.nombre.data
+			fecha_nacimiento=form.fecha_nacimiento.data
+			sexo=form.sexo.data
+			lugar_nacimiento=form.lugar_nacimiento.data
+			curp=form.curp.data
+			tipo_sangre=form.tipo_sangre.data
+			pre_enfermedades=form.pre_enfermedades.data
+			alergias=form.alergias.data
+			contacto=form.contacto.data
+			contacto_referencia=form.contacto_referencia.data
+			transitorio=form.transitorio.data
+			direccion=form.direccion.data
+			conn=conexion()
+			conn.insert_paciente(nombre, fecha_nacimiento, sexo, lugar_nacimiento, curp, tipo_sangre, pre_enfermedades, alergias, contacto, contacto_referencia, transitorio, direccion)
+			flash('Se agrego el paciente correctamente', 'success')
+			return redirect(url_for('base'))
+	else:
+		flash('No tienes acceso a esta URL', 'dangerl')
 		return redirect(url_for('base'))
+
 
 
 	return render_template('nuevo_paciente.html', form=form ,title="Nuevo Paciente")
@@ -256,7 +268,8 @@ def nuevoPaciente():
 def misPacientes():
 	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
 		conn=conexion()
-		form=conn.select_pacientes()
+		id=current_user.id
+		form=conn.select_pacientes_id(id)
 		return render_template('lista_pacientes.html', form=form, title="Mis Pacientes")
 	elif current_user.id_tipo == 4:
 		conn = conexion()
@@ -299,7 +312,7 @@ def nuevoDoctor():
 @app.route('/nuevo_examen', methods=['GET', 'POST'])
 @login_required
 def solicitar_examen():
-	if current_user.id_tipo == 1 or current_user.id_tipo == 3:  # eliminar 3 al terminar
+	if current_user.id_tipo == 3:  # eliminar 3 al terminar
 		conn = conexion()
 		examenes = conn.select_examenes()
 		form = solicitar_examen_form()
@@ -341,10 +354,15 @@ def autocomplete_paciente_nombre():
 @app.route('/historial_examenes', methods=['GET', 'POST'])
 @login_required
 def ver_historial_examenes():
-	if current_user.id_tipo != 4:
+	if current_user.id_tipo == 3:
+
 		conn = conexion()
 		historial = conn.get_historial_examenes()
+		return render_template('historial_examenes_lab.html', historial=historial, form=form, title="Historial Examenes")
+	elif current_user.id_tipo == 2 or current_user.id_tipo == 1:
 
+		conn = conexion()
+		historial = conn.get_historial_examenes()
 		return render_template('historial_examenes.html', historial=historial, form=form, title="Historial Examenes")
 	else:
 		flash('No tienes acceso a la url ingresada', 'danger')
@@ -377,8 +395,10 @@ def ver_examen(id):
 	except:
 		flash('Ocurrio un error.Intentalo mas tarde', 'danger')
 		return redirect(url_for('base'))
-
-	return render_template('ver_resultados_examen.html', examen=examen, title=title_p)
+	if current_user.id_tipo == 3:
+		return render_template('ver_examen_lab.html', examen=examen, title=title_p)
+	else:
+		return render_template('ver_resultados_examen.html', examen=examen, title=title_p)
 
 @app.route('/examenes_pendientes',methods=['GET','POST'])
 @login_required
@@ -505,16 +525,80 @@ def habitaciones():
 @app.route('/asignar_habitacion/id/<id>', methods=['GET', 'POST'])
 @login_required
 def asignar_habitacion(id):
+	validation = True
+
 	if current_user.id_tipo == 4:
-		conn=conexion()
-		form=asignar_habitaciones()
+
+		print("Si es usuario")
+		conn = conexion()
+		form = asignar_habitaciones()
 		doctor = form.doctor.data
 		print(doctor)
 		if form.is_submitted():
-			conn.asignar_doctor(id, doctor)
-		return render_template('asignar_habitacion.html',form=form, id=id)
+			validation = conn.asignar_doctor(id, doctor)
+			if validation:
+				flash('Doctor/Enfermero asignado', 'success')
+				return render_template('base_admin.html', form=form, id=id )
+			else:
+				flash('El usuario que elegiste no es un Doctor/Enfermero o no existe', 'danger')
+				return redirect(url_for('base'))
+		return render_template('asignar_habitacion.html', form=form, id=id)
 	else:
 		flash('No puedes acceder a esta url', 'danger')
 		return redirect(url_for('base'))
+
+
+@app.route('/mis_habitaciones', methods=['GET', 'POST'])
+@login_required
+def mis_habitaciones():
+	if current_user.id_tipo == 1 or current_user.id_tipo == 2:
+		conn=conexion()
+		id = current_user.id
+		form= conn.select_habitaciones(id)
+		if len(form)>0:
+			return render_template('mis_habitaciones.html', form=form, title="Mis Habitacines")
+		else:
+			flash('No tienes habitaciones asignadas', 'danger')
+			return redirect(url_for('base'))
+	else:
+		flash('No puedes acceder a esta URL', 'danger')
+		return redirect(url_for('base'))
+
+
+@app.route('/asignar_paciente/id/<id>', methods=['GET', 'POST'])
+@login_required
+def asignar_paciente(id):
+
+	print("Aki")
+	if current_user.id_tipo == 4:
+		conn = conexion()
+		data = conn.get_all_paciente(id)
+		form = asignar_form()
+		print("1er if")
+		if form.is_submitted():
+			print("2do if if")
+			idPaciente = id
+			idDoctor = form.doctor.data
+			conn = conexion()
+			validation = conn.insert_asignacion(idPaciente, idDoctor)
+			if validation:
+				flash('Doctor/Enfermero asignado', 'success')
+				return render_template('base_admin.html', form=data, id=id  )
+			else:
+				flash('El usuario que elegiste no es un Doctor/Enfermero o no existe', 'danger')
+				return redirect(url_for('base'))
+		return render_template('asignar_paciente.html', data = data, form= form, title="Asignar paciente")
+	else:
+		flash('No puedes acceder a esta url', 'danger')
+		return redirect(url_for('base'))
+
+@app.route('/registro', methods=['GET', 'POST'])
+@login_required
+def register():
+
+	return render_template('registro.html')
+
+
+
 
 

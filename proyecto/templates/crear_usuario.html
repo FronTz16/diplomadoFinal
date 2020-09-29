@@ -1,4 +1,4 @@
-{% extends "new_navbar.html" %} {% block content %}
+{% extends "base_neutral.html" %} {% block content %}
 <div class="container">
     <div class="d-flex justify-content-center align-items-center login">
         <div class="card tarjeta-login mb-4 mt-4">
@@ -74,6 +74,7 @@
 
                     <div class="form-group">
                         {{form.submit(class="btn btn-primary btn-block")}}
+                        <i class="fas fa-briefcase"><a href="{{url_for('login')}}">Iniciar Sesión</a></i>
                     </div>
                 </form>
             </div>

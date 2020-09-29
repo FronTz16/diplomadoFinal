@@ -1,0 +1,38 @@
+{% extends "base_admin.html" %} {% block content %}
+
+{% for data in data %}
+<div class="cards">
+    <div class="card-body">
+       <div class="row">
+        <div class="col">
+            <label>{{ data.0 }}</label>
+            {% endfor %}
+        </div>
+        <div class="col">
+            <form action="#" method="POST">
+                {{ form.hidden_tag() }}
+                {{form.doctor.label()}}
+                            {% if form.doctor.errors %}
+                                        {{form.doctor(class="form-control is-invalid", placeholder="Id Doctor")}}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.doctor.errors %}
+                                                <span>{{error}}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form.doctor(class="form-control", placeholder="Id Doctor")}}
+                                {% endif %}
+
+
+        <div class="col">
+            <br>
+            {{form.submit(class="btn bg-danger btn-lg btn-block")}}
+            </form>
+        </div>
+       </div>
+      </form>
+    </div>
+</div>
+</div>
+
+{% endblock content %}

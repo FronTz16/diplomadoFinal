@@ -190,3 +190,8 @@ class asignar_habitaciones(FlaskForm):
 
 	doctor = StringField('Id doctor')
 	submit = SubmitField()
+
+class asignar_form(FlaskForm):
+
+	doctor = StringField("Id Doctor")
+	submit = SubmitField()
